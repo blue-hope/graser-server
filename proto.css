@@ -1,0 +1,51 @@
+ul{
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: orange;
+  color: white;
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+}
+
+li{
+  float: left;
+  width: 25%;
+}
+
+li a{
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+li a:hover{
+  text-decoration: none;
+  color: white;
+}
+
+header ul{
+  top: 0;
+}
+
+footer ul{
+  bottom: 0;
+}
+
+footer ul li{
+  border-right: 1px solid white;
+}
+
+body{
+  background: url(img/main1.jpg);
+  background-position: center;
+}
+
+#main_info{
+  margin-top: 48px;
+  background-color: rgba(255, 255, 255, 0.5);
+}
