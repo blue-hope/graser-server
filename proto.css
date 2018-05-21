@@ -1,21 +1,20 @@
-ul{
+nav ul{
   list-style-type: none;
   margin: 0;
   padding: 0;
   overflow: hidden;
-  background-color: orange;
   color: white;
   position: fixed;
   width: 100%;
   z-index: 1;
 }
 
-li{
+nav li{
   float: left;
   width: 25%;
 }
 
-li a{
+header nav li a{
   display: block;
   color: white;
   text-align: center;
@@ -23,16 +22,31 @@ li a{
   text-decoration: none;
 }
 
-li a:hover{
+footer nav li a{
+  display: block;
+  color: orange;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+header nav li a:hover{
   text-decoration: none;
   color: white;
 }
 
+footer nav li a:hover{
+  text-decoration: none;
+  color: orange;
+}
+
 header ul{
+  background-color: orange;
   top: 0;
 }
 
 footer ul{
+  background-color: white;
   bottom: 0;
 }
 
@@ -40,12 +54,29 @@ footer ul li{
   border-right: 1px solid white;
 }
 
-body{
-  background: url(img/main1.jpg);
-  background-position: center;
-}
-
 #main_info{
   margin-top: 48px;
-  background-color: rgba(255, 255, 255, 0.5);
+  background-color: rgba(255, 255, 255, 0.8);
+}
+
+p{
+  color: orange;
+  padding-left: 10px;
+}
+
+#introbox_photo{
+  width: 40%;
+  margin: 0;
+}
+
+#introbox_photo img{
+  border-radius: 50%;
+  width: 50%;
+  margin-left: 5%;
+}
+
+#introbox_info{
+  width: 60%;
+  margin: 0;
+  position: inline;
 }
