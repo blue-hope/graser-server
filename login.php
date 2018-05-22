@@ -1,4 +1,5 @@
 <!DOCTYPE HTML>
+<?php session_start(); ?>
 <html>
   <head>
     <title>
@@ -33,7 +34,6 @@
         margin: 3px;
       }
     </style>
-
   </head>
 
   <body>
@@ -41,14 +41,35 @@
       <nav>
         <ul>
           <li id = 'logo'><a href = 'index.html'>logo</a></li>
-          <li style='float: right' id = 'login'><a href = 'login.php'><i class = 'material-icons'>person</i></a></li>
+          <li style='float: right' id = 'login'><a href = 'login.html'><i class = 'material-icons'>person</i></a></li>
         </ul>
       </nav>
     </header>
     <article id = 'main_info'>
       <div id = 'intro'>
           <br/><br/>
-          <h1>리뷰</h1>
+            <div id = 'login-box'>
+              <div class = 'container'>
+                <h1>Email 로그인</h1>
+                <p id = 'emailloginbox'></p>
+                <div style = 'margin-left: 10%;'>
+                  <?php if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {?>
+                  <form action="loginOK.php" method="post">
+                    <p>ID<br><input type="text" name = 'user_id' style = 'color: black;'></p>
+                    <p>PW<br><input type="password" name = 'user_id' style = 'color: black;'></p>
+                    <p style = 'color: black; font-size: 15px;'><input type="submit" value="로그인"></p>
+                  </form>
+                <?php }?>
+                </div>
+              </div>
+              <div class = 'container'>
+                <h1>kakaotalk</h1>
+              </div>
+              <div class = 'container'>
+                <h1>google</h1>
+              </div>
+            </div>
+            <h1><a>아직 회원이 아니신가요?</a></h1>
       </div>
 
     </article>
@@ -56,12 +77,13 @@
       <nav>
         <ul style='margin-bottom: 0;'>
           <li id = 'find'><a href = 'find.html'><i class='material-icons'>pageview</i></a></li>
-          <li id = 'review' style = 'background-color: orange;'><a href = 'review.html'><i class='material-icons' style='color:white;'>assignment</i></a></li>
+          <li id = 'review'><a href = 'review.html'><i class='material-icons'>assignment</i></a></li>
           <li id = 'mypage'><a><i class='material-icons'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a><i class='material-icons'>more</i></a></li>
         </ul>
       </nav>
     </footer>
+
   </body>
 
 </html>
