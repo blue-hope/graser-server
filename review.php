@@ -41,11 +41,10 @@
     <header>
       <nav>
         <ul>
-<<<<<<< HEAD:review.php
           <li id = 'logo'><a href = 'index.php'>logo</a></li>
           <?php
           if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
-            echo "<li style='float: right' id = 'login'><a href = 'login.php'><i class = 'material-icons'>person</i></a></li>";
+            echo "<li style='float: right' id = 'login'><a href = 'login.html'><i class = 'material-icons'>person</i></a></li>";
           } else {
             $user_id = $_SESSION['user_id'];
             $user_name = $_SESSION['user_name'];
@@ -53,10 +52,6 @@
             echo "<li style = 'float: right; color: white;'><a>".$user_name." 님</a></li>";
           }
           ?>
-=======
-          <li id = 'logo'><a href = 'index.html'>logo</a></li>
-          <li style='float: right' id = 'login'><a href = 'login.php'><i class = 'material-icons'>person</i></a></li>
->>>>>>> 7c8a7300813e37f7aad5c41e002db6759d3f6e25:review.html
         </ul>
       </nav>
     </header>
@@ -70,13 +65,8 @@
     <footer>
       <nav>
         <ul style='margin-bottom: 0;'>
-<<<<<<< HEAD:review.php
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
           <li id = 'review' style = 'background-color: orange;'><a href = 'review.php'><i class='material-icons' style='color:white;'>assignment</i></a></li>
-=======
-          <li id = 'find'><a href = 'find.html'><i class='material-icons'>pageview</i></a></li>
-          <li id = 'review' style = 'background-color: orange;'><a href = 'review.html'><i class='material-icons' style='color:white;'>assignment</i></a></li>
->>>>>>> 7c8a7300813e37f7aad5c41e002db6759d3f6e25:review.html
           <li id = 'mypage'><a><i class='material-icons'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a><i class='material-icons'>more</i></a></li>
         </ul>

@@ -44,7 +44,7 @@
           <li id = 'logo'><a href = 'index.php'>logo</a></li>
           <?php
           if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
-            echo "<li style='float: right' id = 'login'><a href = 'login.php'><i class = 'material-icons'>person</i></a></li>";
+            echo "<li style='float: right' id = 'login'><a href = 'login.html'><i class = 'material-icons'>person</i></a></li>";
           } else {
             $user_id = $_SESSION['user_id'];
             $user_name = $_SESSION['user_name'];
