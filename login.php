@@ -69,7 +69,7 @@
                 <h1>google</h1>
               </div>
             </div>
-            <h1><a>아직 회원이 아니신가요?</a></h1>
+            <h1><a href="join.php">아직 회원이 아니신가요?</a></h1>
       </div>
 
     </article>
