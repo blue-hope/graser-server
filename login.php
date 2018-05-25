@@ -56,11 +56,7 @@
                   <?php if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {?>
                   <form action="loginOK.php" method="post">
                     <p>ID<br><input type="text" name = 'user_id' style = 'color: black;'></p>
-<<<<<<< HEAD
                     <p>PW<br><input type="password" name = 'user_pw' style = 'color: black;'></p>
-=======
-                    <p>PW<br><input type="password" name = 'user_id' style = 'color: black;'></p>
->>>>>>> 7c8a7300813e37f7aad5c41e002db6759d3f6e25
                     <p style = 'color: black; font-size: 15px;'><input type="submit" value="로그인"></p>
                   </form>
                 <?php }?>
@@ -73,11 +69,7 @@
                 <h1>google</h1>
               </div>
             </div>
-<<<<<<< HEAD
-            <h1><a href = 'join.php'>아직 회원이 아니신가요?</a></h1>
-=======
-            <h1><a>아직 회원이 아니신가요?</a></h1>
->>>>>>> 7c8a7300813e37f7aad5c41e002db6759d3f6e25
+            <h1><a href="join.php">아직 회원이 아니신가요?</a></h1>
       </div>
 
     </article>

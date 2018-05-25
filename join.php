@@ -14,8 +14,9 @@
 
     <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="joinCheck.js"></script>
 
     <!--font-->
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:700" rel="stylesheet">
@@ -57,10 +58,24 @@
     </header>
     <article id = 'main_info'>
       <div id = 'intro'>
-          <br/><br/>
-          한중아 여기에다가 form 작성하면 돼 그리고 action 은 joinOK.php로 post로 넘겨 알았지?
-          내가 고른건 ID password name nickname phone mail birth 이거니까 이거 유효성검사 알아서하고
-          잘하리라 믿는다 ㅎㅎ
+        <form method="post" action="joinOK.php">
+          <p>ID : <input id="ID" type="text" required></p>
+          <p id="eID" style="color:red"></p>
+          <p>PW : <input id="PW" type="password" required></p>
+          <p id="ePW" style="color:red"></p>
+          <p>Name : <input id="NAME" type="text" required></p>
+          <p id="eNAME" style="color:red"></p>
+          <p>NickName : <input id="Nick" type="text" required></p>
+          <p id="eNick" style="color:red"></p>
+          <p>Phone : <input id="PHN" type="tel" placeholder="01012345678" required></p>
+          <p id="ePHN" style="color:red"></p>
+          <p>Birth : <input id="BTN" type="number" placeholder="YYMMDD" required></p>
+          <p id="eBTN" style="color:red"></p>
+          <p>Email :  <input id="EMN" type="text" required></p>
+          <p id="eEMN" style="color:red"></p>
+          <p><input type="radio" name="gender" value="male" required> Male</p>
+          <p><input type="radio" name="gender" value="female" required> Female</p>
+          <p><input id="joinbutton" type="submit" value="Join" disabled></p>
       </div>
 
     </article>
