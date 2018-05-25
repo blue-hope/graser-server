@@ -6,7 +6,11 @@ nav ul{
   color: white;
   position: fixed;
   width: 100%;
+<<<<<<< HEAD
+  height: 48px;
+=======
   height: 10%;
+>>>>>>> 7c8a7300813e37f7aad5c41e002db6759d3f6e25
   z-index: 1;
 }
 
@@ -20,7 +24,7 @@ header nav li a{
   display: block;
   color: white;
   text-align: center;
-  padding: 14px 16px;
+  padding: 10px 16px;
   text-decoration: none;
 }
 
@@ -30,6 +34,7 @@ footer nav li a{
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+  height: 48px;
 }
 
 header nav li a:hover{
