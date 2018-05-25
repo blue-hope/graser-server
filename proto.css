@@ -60,28 +60,12 @@ footer ul li{
 #main_info{
   margin-top: 48px;
   background-color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 56px;
 }
 
 p{
   color: orange;
   padding-left: 10px;
-}
-
-#introbox_photo{
-  width: 40%;
-  margin: 0;
-}
-
-#introbox_photo img{
-  border-radius: 50%;
-  width: 50%;
-  margin-left: 5%;
-}
-
-#introbox_info{
-  width: 60%;
-  margin: 0;
-  position: inline;
 }
 
 .container{

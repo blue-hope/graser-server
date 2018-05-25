@@ -36,7 +36,7 @@
     </style>
 
   </head>
-  
+
   <body>
     <header>
       <nav>
@@ -68,7 +68,7 @@
         <ul style = 'height: 56px;'>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
           <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
-          <li id = 'mypage'><a><i class='material-icons'>info</i></a></li>
+          <li id = 'mypage'><a href = 'mypage.php'><i class='material-icons'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a><i class='material-icons'>more</i></a></li>
         </ul>
       </nav>
