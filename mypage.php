@@ -58,8 +58,23 @@
     <article id = 'main_info'>
       <div id = 'intro'>
           <br/><br/>
-          <h1>예약과 리뷰를 편하게!</h1>
-          <h1>그래서, 그레서</h1>
+          <?php
+            if(isset($_SESSION['user_type'])){
+              if($_SESSION['user_type'] == '0'){
+                echo "<h1>손님계정 접속중</h1>";
+              }
+              elseif($_SESSION['user_type'] == '1'){
+                echo "<h1>점주님계정 접속중</h1>";
+              }
+              elseif($_SESSION['user_type'] == '2'){
+                echo "<h1>관리자계정 접속중</h1>";
+              }
+            }
+            else{
+              echo "<script>alert('로그인이 필요한 서비스입니다.');</script>";
+              echo "<script>window.location.replace('login.html');</script>";
+            }
+          ?>
       </div>
 
     </article>
@@ -68,7 +83,7 @@
         <ul style = 'height: 56px;'>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
           <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
-          <li id = 'mypage'><a href = 'mypage.php'><i class='material-icons'>info</i></a></li>
+          <li id = 'mypage' style = 'background-color: orange;'><a href = 'mypage.php'><i class='material-icons' style = 'color: white;'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a><i class='material-icons'>more</i></a></li>
         </ul>
       </nav>

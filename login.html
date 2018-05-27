@@ -1,5 +1,4 @@
 <!DOCTYPE HTML>
-<?php session_start(); ?>
 <html>
   <head>
     <title>
@@ -34,38 +33,46 @@
         margin: 3px;
       }
     </style>
-
   </head>
 
   <body>
     <header>
       <nav>
-        <ul style = 'height: 48px;'>
+        <ul>
           <li id = 'logo'><a href = 'index.php'>logo</a></li>
-          <?php
-          if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
-            echo "<li style='float: right' id = 'login'><a href = 'login.html'><i class = 'material-icons'>person</i></a></li>";
-          } else {
-            $user_id = $_SESSION['user_id'];
-            $user_name = $_SESSION['user_name'];
-            echo "<li style = 'float: right; height: 48px;' id = 'logout'><a href = 'logout.php'><i class = 'material-icons'>lock_open</i></a></li>";
-            echo "<li style = 'float: right; color: white;'><a style = 'padding-left: 7px; padding-right: 7px; margin: 0;'>".$user_name." 님</a></li>";
-          }
-          ?>
+          <li style='float: right' id = 'login'><a href = 'login.html'><i class = 'material-icons'>person</i></a></li>
         </ul>
       </nav>
     </header>
     <article id = 'main_info'>
       <div id = 'intro'>
           <br/><br/>
-          <h1>예약과 리뷰를 편하게!</h1>
-          <h1>그래서, 그레서</h1>
+            <div id = 'login-box'>
+              <div class = 'container'>
+                <h1>Email 로그인</h1>
+                <p id = 'emailloginbox'></p>
+                <div style = 'margin-left: 10%;'>
+                  <form action="loginOK.php" method="post">
+                    <p>ID<br><input type="text" name = 'user_id' style = 'color: black;'></p>
+                    <p>PW<br><input type="password" name = 'user_pw' style = 'color: black;'></p>
+                    <p style = 'color: black; font-size: 15px;'><input type="submit" value="로그인"></p>
+                  </form>
+                </div>
+              </div>
+              <div class = 'container'>
+                <h1>kakaotalk</h1>
+              </div>
+              <div class = 'container'>
+                <h1>google</h1>
+              </div>
+            </div>
+            <h1><a href = 'join.php'>아직 회원이 아니신가요?</a></h1>
       </div>
 
     </article>
     <footer>
       <nav>
-        <ul style = 'height: 56px;'>
+        <ul style='margin-bottom: 0;'>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
           <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'mypage'><a href = 'mypage.php'><i class='material-icons'>info</i></a></li>
@@ -73,6 +80,7 @@
         </ul>
       </nav>
     </footer>
+
   </body>
 
 </html>
