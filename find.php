@@ -12,6 +12,10 @@
     <!--stylesheet-->
     <link rel="stylesheet" href="proto.css">
 
+    <!--naver map-->
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=AuXtXKVeCpZniX0AyrFZ"></script>
+    <script type="text/javascript" src="map.js"></script>
+
     <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -97,6 +101,8 @@
         </div>
 
       </div>
+      <div id="map" style = "width:100%;height:400px;"></div>
+
     </article>
     <footer>
       <nav>
