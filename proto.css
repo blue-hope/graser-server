@@ -73,3 +73,15 @@ p{
   border: 2px solid orange;
   border-radius: 10%;
 }
+
+#info{
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(img/shinchon.png);
+}
+
+#info_2{
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(img/food.png);
+}
+
+#f1{
+  background-image: linear-gradient(to bottom, rgba(0,0,0,0.6) 0%,rgba(0,0,0,0.6) 100%), url(img/food1.png);
+}
