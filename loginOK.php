@@ -26,6 +26,16 @@
       $_SESSION['user_id'] = $res['user_ID'];
       $_SESSION['user_name'] = $res['user_Name'];
       $_SESSION['user_type'] = $res['user_Type'];
+      $_SESSION['resv'] = $res['resv'];
+      $_SESSION['user_N'] = $res['user_N'];
+
+
+      $sql2 = "SELECT * FROM stores WHERE user_N = '".$_SESSION['user_N']."'";
+      $result2 = mysqli_query($conn, $sql);
+      $res2 = mysqli_fetch_assoc($result);
+
+      $_SESSION['txt'] = $res2['txt'];
+
       mysqli_close($conn);
       echo "<script>window.location.replace('index.php');</script>";
     }

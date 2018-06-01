@@ -29,7 +29,7 @@
     exit;
   }
 
-  $sql = "INSERT INTO users VALUES ('0','".$user_id."', '".$user_pw."', '".$user_name."', '".$user_nick."', '".$user_birth."', '".$user_email."', '".$user_phone."', '".$user_type."')";
+  $sql = "INSERT INTO users VALUES ('0','".$user_id."', '".$user_pw."', '".$user_name."', '".$user_nick."', '".$user_phone."', '".$user_birth."', '".$user_email."', '".$user_type."', '0')";
   $result = mysqli_query($conn, $sql);
   if($result){
     mysqli_close($conn);
