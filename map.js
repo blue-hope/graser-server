@@ -3,10 +3,10 @@ function start()
     init();
 }
 //map init setting div:"maps"
-function init()
+function init_(lat, long)
 {
   var map = new naver.maps.Map('map', {
-    center: new naver.maps.LatLng(37.5575031, 126.9368837),
+    center: new naver.maps.LatLng(lat, long),
     zoom: 12,
     zoomControl: true,
     minZoom:11
@@ -149,6 +149,22 @@ function init()
     });
   }
 }
+
+function init()
+{
+    window.navigator.geolocation.getCurrentPosition(current_position, denied_position);
+}
+
+function current_position(position)
+{
+    init_(position.coords.latitude, position.coords.longitude);
+}
+
+function denied_position(position)
+{
+    init_(37.5575031, 126.9368837)
+}
+
 
 
 
