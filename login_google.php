@@ -1,7 +1,6 @@
 <?php
 	session_start();
 	$tmpid = explode("@", $_POST['email']);
-	echo $tmpid[0];
 	$conn = mysqli_connect("localhost","root","kwondong704","users");
 
   if(!$conn){

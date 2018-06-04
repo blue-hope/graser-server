@@ -1,5 +1,28 @@
 <!DOCTYPE HTML>
 <?php session_start();?>
+<?php
+  $conn = mysqli_connect("localhost", "root", "kwondong704","users");
+  $store_name = "";
+  if(!$conn){
+    print "Error - Could not connect to MySQL: ".mysqli_error();
+    exit;
+  }
+
+  $sql = "SELECT * FROM stores WHERE user_N = '".$_SESSION['user_N']."'";
+  $result = mysqli_query($conn, $sql);
+  $res = mysqli_fetch_assoc($result);
+  if($result){
+    $store_name = $res['store'];
+    $store_ppl = $res['ppl'];
+    $store_txt = $res['txt'];
+    $store_tag = $res['tag'];
+  }
+  else{
+    echo "<script>alert('지점 등록에 실패하였습니다!');</script>";
+    echo "<script>window.location.replace('mypage.php');</script>";
+    mysqli_close($conn);
+  }
+ ?>
 <html>
   <head>
     <title>
@@ -33,7 +56,7 @@
         });
         var str = [
               '<div class="iw_inner">',
-              '   <h3><?=$_SESSION['txt']?></h3>',
+              '   <h3><?=$store_txt?></h3>',
               '</div>'
           ].join('');
         setName(str, store);
@@ -127,29 +150,7 @@
       </nav>
     </header>
     <article id = 'main_info'>
-      <?php
-        $conn = mysqli_connect("localhost", "root", "kwondong704","users");
-        $store_name = "";
-        if(!$conn){
-          print "Error - Could not connect to MySQL: ".mysqli_error();
-          exit;
-        }
 
-        $sql = "SELECT * FROM stores WHERE user_N = '".$_SESSION['user_N']."'";
-        $result = mysqli_query($conn, $sql);
-        $res = mysqli_fetch_assoc($result);
-        if($result){
-          $store_name = $res['store'];
-          $store_ppl = $res['ppl'];
-          $store_txt = $res['txt'];
-          $store_tag = $res['tag'];
-        }
-        else{
-          echo "<script>alert('지점 등록에 실패하였습니다!');</script>";
-          echo "<script>window.location.replace('mypage.php');</script>";
-          mysqli_close($conn);
-        }
-       ?>
       <div id = 'intro'>
           <br/><br/>
           <h1>지점관리</h1>

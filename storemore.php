@@ -73,9 +73,9 @@ else{
       function getLocation() {
         if (navigator.geolocation) { // GPS를 지원하면
           navigator.geolocation.getCurrentPosition(function(position) {
-            init(position.coords.latitude, position.coords.longitude);
+            init(position.coords.latitude, position.coords.longitude, 'm');
           }, function(error) {
-            init(<?=$select_lat?>, <?=$select_lng?>);
+            init(<?=$select_lat?>, <?=$select_lng?>, 's');
           }, {
             enableHighAccuracy: false,
             maximumAge: 0,
@@ -86,11 +86,31 @@ else{
         }
       }
 
-      function start()
+      function start(args)
       {
+        if(args == 'm'){
           getLocation();
+          var x2 = document.getElementById('dist-nav').children[0].children[0].style;
+          var x1 = document.getElementById('dist-nav').children[0].children[1].style;
+          x2.color = 'white';
+          x2.backgroundColor = 'orange';
+          x1.color = 'orange';
+          x1.backgroundColor = 'white';
+        }
+        else if(args == 's'){
+          init(<?=$select_lat?>, <?=$select_lng?>, 's');
+          var x2 = document.getElementById('dist-nav').children[0].children[0].style;
+          var x1 = document.getElementById('dist-nav').children[0].children[1].style;
+          x1.color = 'white';
+          x1.backgroundColor = 'orange';
+          x2.color = 'orange';
+          x2.backgroundColor = 'white';
+        }
+        else{
+          init(<?=$select_lat?>, <?=$select_lng?>);
+        }
       }
-      function init(arg_lat, arg_lng)
+      function init(arg_lat, arg_lng, type)
       {
         var map = new naver.maps.Map('map', {
           center: new naver.maps.LatLng(arg_lat, arg_lng),
@@ -100,15 +120,27 @@ else{
         });
 
         var store = new naver.maps.Marker({
-          position: new naver.maps.LatLng(<?=$select_lat?>, <?=$select_lng?>),
+          position: new naver.maps.LatLng(arg_lat, arg_lng),
           map: map
         });
-        var str = [
-              '<div class="iw_inner">',
-              '   <h3><?=$_SESSION['txt']?></h3>',
-              '</div>'
-          ].join('');
-        setName(str, store);
+
+        if(type == 'm'){
+          var str = [
+                '<div class="iw_inner">',
+                '   <h3>내 위치</h3>',
+                '</div>'
+            ].join('');
+          setName(str, store);
+        }
+        else if(type == 's'){
+          var str = [
+                '<div class="iw_inner">',
+                '   <h3><?=$select_txt?></h3>',
+                '</div>'
+            ].join('');
+          setName(str, store);
+        }
+
       }
 
       function setName(contentString, where)
@@ -169,6 +201,39 @@ else{
         text-align: center;
         width: 80px;
       }
+      .kedit
+      {
+        background-color: orange;
+        color: white;
+        border: 1px solid white;
+        text-align: center;
+        width: 80px;
+      }
+
+      ul{
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        color: orange;
+        width: 100%;
+      }
+
+      li{
+        float: right;
+        width: 60px;
+      }
+      div.dist-nav ul{
+        border: 1px solid orange
+      }
+
+      div.dist-nav ul li{
+        text-align: center;
+      }
+
+      div.dist-nav ul li#navleft{
+        border-right: 1px solid orange
+      }
     </style>
 
   </head>
@@ -195,13 +260,24 @@ else{
       <div id = 'intro'>
           <br/><br/>
           <h1>지점정보</h1>
-          <div class = 'more'>가게명: <?=$select_name?></div>
+          <div class = 'more' style = 'background-color: orange; color: white;'>가게명: <?=$select_name?></div>
           <div class = 'more'>최대인원: <?=$select_ppl?></div>
           <div class = 'more'>가게공지: <br><textarea rows = '10' cols = '25' value = '' style = 'color: black;' onclick="this.value=''"><?=$select_txt?></textarea></div>
           <div class = 'more'>태그: <?=$select_tag?></div>
-          <div class = 'more'>위치확인</div>
+          <br>
+          <div class = 'more' style = 'background-color: orange; color: white;'>위치확인</div>
+          <div class = 'dist-nav' id = 'dist-nav'>
+            <ul>
+              <li style = 'width: 50%;' onclick = "start('m')">내위치</li>
+              <li id = 'navleft' style = 'width: 50%;' onclick = "start('s')">가게위치</li>
+            </ul>
+          </div>
           <div id ="map" style = "width:100%;height:300px;"></div>
+          <br>
+          <div class = 'more' style = 'background-color: orange; color: white;'>리뷰</div>
+          <div id = "review" style = "width: 100%;"></div>
           <div class = "kback" style = 'float: left;'><a href = 'find.php' style = 'color: white;'>뒤로가기</a></div>
+          <div class = "kedit" style = 'float: right;'><a href = 'review.php?i=<?=$id?>' style = 'color: white;'>리뷰보기</a></div>
           <br><br>
       </div>
 
