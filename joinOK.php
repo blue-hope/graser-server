@@ -3,12 +3,10 @@
   $user_pw = $_POST['user_pw'];
   $user_name = $_POST['user_name'];
   $user_nick = $_POST['user_nick'];
-  $user_phone = $_POST['user_phone'];
-  $user_birth = $_POST['user_birth'];
   $user_email = $_POST['user_email'];
   $user_type = $_POST['user_type'];
 
-  if ( !isset($_POST['user_id']) || !isset($_POST['user_pw']) || !isset($_POST['user_name']) || !isset($_POST['user_nick']) || !isset($_POST['user_phone']) || !isset($_POST['user_birth']) || !isset($_POST['user_email'])) {
+  if ( !isset($_POST['user_id']) || !isset($_POST['user_pw']) || !isset($_POST['user_name']) || !isset($_POST['user_nick']) || !isset($_POST['user_email'])) {
     header("Content-Type: text/html; charset=UTF-8");
     echo "<script>alert('아이디 또는 비밀번호가 빠졌거나 잘못된 접근입니다.');";
     echo "window.location.replace('login.html');</script>";
@@ -29,7 +27,7 @@
     exit;
   }
 
-  $sql = "INSERT INTO users VALUES ('0','".$user_id."', '".$user_pw."', '".$user_name."', '".$user_nick."', '".$user_phone."', '".$user_birth."', '".$user_email."', '".$user_type."', '0')";
+  $sql = "INSERT INTO users VALUES ('0','".$user_id."', '".$user_pw."', '".$user_name."', '".$user_nick."', '".$user_email."', '".$user_type."', '0')";
   $result = mysqli_query($conn, $sql);
   if($result){
     mysqli_close($conn);

@@ -1,5 +1,60 @@
 <!DOCTYPE HTML>
-<?php session_start();?>
+<?php session_start();
+$id = $_GET['i'];
+$conn = mysqli_connect("localhost", "root", "kwondong704","users");
+if(!$conn){
+  print "Error - Could not connect to MySQL: ".mysqli_error();
+  exit;
+}
+$isdate = 't';
+$sql = "SELECT * FROM stores";
+$result = mysqli_query($conn, $sql);
+if($result){
+  while($row = mysqli_fetch_assoc($result)){
+    $store_name[] = $row['store'];
+    $ppl[] = $row['ppl'];
+    $txt[] = $row['txt'];
+    $tag[] = $row['tag'];
+    $lat[] = $row['lat'];
+    $lng[] = $row['lng'];
+  }
+  $select_name = $store_name[$id];
+  $select_ppl = $ppl[$id];
+  $select_txt = $txt[$id];
+  $select_lat = $lat[$id];
+  $select_lng = $lng[$id];
+  if($tag[$id] == '1')
+    $select_tag = '고기구이';
+  elseif($tag[$id] == '2')
+    $select_tag = '치킨';
+  elseif($tag[$id] == '3')
+    $select_tag = '막걸리';
+  elseif($tag[$id] == '4')
+    $select_tag = '양주';
+  elseif($tag[$id] == '5')
+    $select_tag = '맥주';
+  elseif($tag[$id] == '6')
+    $select_tag = '포차식';
+  elseif($tag[$id] == '7')
+    $select_tag = '중국식';
+  elseif($tag[$id] == '8')
+    $select_tag = '일본식';
+  elseif($tag[$id] == '9')
+    $select_tag = '국물요리';
+  elseif($tag[$id] == '10')
+    $select_tag = '회';
+  else {
+    $select_tag = '그 외';
+  }
+
+
+  mysqli_close($conn);
+}
+else{
+  mysqli_close($conn);
+}
+
+?>
 <html>
   <head>
     <title>
@@ -12,23 +67,40 @@
     <!--stylesheet-->
     <link rel="stylesheet" href="proto.css">
 
-    <!--naver map-->
+    <!--naver map & geolocation-->
     <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?clientId=siGiOdPbmbj3xrNIGsuH&submodules=geocoder"></script>
     <script type="text/javascript">
+      function getLocation() {
+        if (navigator.geolocation) { // GPS를 지원하면
+          navigator.geolocation.getCurrentPosition(function(position) {
+            init(position.coords.latitude, position.coords.longitude);
+          }, function(error) {
+            init(<?=$select_lat?>, <?=$select_lng?>);
+          }, {
+            enableHighAccuracy: false,
+            maximumAge: 0,
+            timeout: Infinity
+          });
+        } else {
+          alert('GPS를 지원하지 않습니다');
+        }
+      }
+
       function start()
       {
-          init();
+          getLocation();
       }
-      function init()
+      function init(arg_lat, arg_lng)
       {
         var map = new naver.maps.Map('map', {
-          center: new naver.maps.LatLng(<?=$_GET['lat']?>, <?=$_GET['lng']?>),
+          center: new naver.maps.LatLng(arg_lat, arg_lng),
           zoom: 11,
           zoomControl: true,
           minZoom:11
         });
+
         var store = new naver.maps.Marker({
-          position: new naver.maps.LatLng(<?=$_GET['lat']?>, <?=$_GET['lng']?>),
+          position: new naver.maps.LatLng(<?=$select_lat?>, <?=$select_lng?>),
           map: map
         });
         var str = [
@@ -54,6 +126,7 @@
         });
       }
 
+      addEventListener("load",getLocation, false);
       addEventListener("load", start, false);
 
     </script>
@@ -96,14 +169,6 @@
         text-align: center;
         width: 80px;
       }
-      .kedit
-      {
-        background-color: orange;
-        color: white;
-        border: 1px solid white;
-        text-align: center;
-        width: 80px;
-      }
     </style>
 
   </head>
@@ -127,40 +192,16 @@
       </nav>
     </header>
     <article id = 'main_info'>
-      <?php
-        $conn = mysqli_connect("localhost", "root", "kwondong704","users");
-        $store_name = "";
-        if(!$conn){
-          print "Error - Could not connect to MySQL: ".mysqli_error();
-          exit;
-        }
-
-        $sql = "SELECT * FROM stores WHERE user_N = '".$_SESSION['user_N']."'";
-        $result = mysqli_query($conn, $sql);
-        $res = mysqli_fetch_assoc($result);
-        if($result){
-          $store_name = $res['store'];
-          $store_ppl = $res['ppl'];
-          $store_txt = $res['txt'];
-          $store_tag = $res['tag'];
-        }
-        else{
-          echo "<script>alert('지점 등록에 실패하였습니다!');</script>";
-          echo "<script>window.location.replace('mypage.php');</script>";
-          mysqli_close($conn);
-        }
-       ?>
       <div id = 'intro'>
           <br/><br/>
-          <h1>지점관리</h1>
-          <div class = 'more'>가게명: <?=$store_name?></div>
-          <div class = 'more'>최대인원: <?=$store_ppl?></div>
-          <div class = 'more'>가게공지: <br><textarea rows = '10' cols = '25' value = '' style = 'color: black;' onclick="this.value=''"><?=$store_txt?></textarea></div>
-          <div class = 'more'>태그: <?=$store_tag?></div>
+          <h1>지점정보</h1>
+          <div class = 'more'>가게명: <?=$select_name?></div>
+          <div class = 'more'>최대인원: <?=$select_ppl?></div>
+          <div class = 'more'>가게공지: <br><textarea rows = '10' cols = '25' value = '' style = 'color: black;' onclick="this.value=''"><?=$select_txt?></textarea></div>
+          <div class = 'more'>태그: <?=$select_tag?></div>
           <div class = 'more'>위치확인</div>
-          <div class = 'more'><div id ="map" style = "width:100%;height:300px;"></div></div>
-          <div class = "kback" style = 'float: left;'><a href = 'mypage.php' style = 'color:white;'>뒤로가기</a></div>
-          <div class = "kedit" href = '' style = 'float: right;'>공지수정</div>
+          <div id ="map" style = "width:100%;height:300px;"></div>
+          <div class = "kback" style = 'float: left;'><a href = 'find.php' style = 'color: white;'>뒤로가기</a></div>
           <br><br>
       </div>
 
@@ -169,8 +210,8 @@
       <nav>
         <ul style = 'height: 56px;'>
           <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
-          <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
-          <li id = 'mypage' style = 'background-color: orange;'><a href = 'mypage.php'><i class='material-icons' style = 'color: white;'>info</i></a></li>
+          <li id = 'find' style = 'background-color: orange;'><a href = 'find.php'><i class='material-icons' style = 'color: white;'>pageview</i></a></li>
+          <li id = 'mypage'><a href = 'mypage.php'><i class='material-icons'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a href = 'more.php'><i class='material-icons'>more</i></a></li>
         </ul>
       </nav>

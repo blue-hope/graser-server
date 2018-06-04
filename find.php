@@ -120,6 +120,18 @@
       a{
         text-decoration: none;
       }
+
+      div.dist-nav ul{
+        border: 1px solid orange
+      }
+
+      div.dist-nav ul li{
+        text-align: center;
+      }
+
+      div.dist-nav ul li#navleft{
+        border-right: 1px solid orange
+      }
     </style>
 
   </head>
@@ -151,7 +163,7 @@
           <h1>예약할 장소</h1>
           <br>
           <div style = 'margin-left: 20%; margin-right: 0;'>
-            <input type = 'text' style='margin-left: 10%;' id = 'search' onkeyup="func1('0')" autocomplete="on" placeholder="음식점/술집 이름으로 찾기"/>
+            <input type = 'text' style='margin-left: 8%;' id = 'search' onkeyup="func1('0')" autocomplete="on" placeholder="음식점/술집 이름으로 찾기"/>
           </div>
           <br>
 
@@ -176,6 +188,14 @@
       <br>
       <div class = 'more'>등록되어 있는 가게</div>
       <br>
+      <div class = 'dist-nav' id = 'dist-nav'>
+        <ul>
+          <li style = 'width: 25%;' onclick = "func1('-4')">1km이내</li>
+          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-3')">500m이내</li>
+          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-2')">300m이내</li>
+          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-1')">100m이내</li>
+        </ul>
+      </div>
       <div id="map" style = "width:100%;height:400px;"></div>
       <br>
 
@@ -186,8 +206,8 @@
     <footer>
       <nav>
         <ul style = 'height: 56px;'>
+          <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'find' style = 'background-color: orange;'><a href = 'find.php'><i class='material-icons' style = 'color: white;'>pageview</i></a></li>
-          <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'mypage'><a href = 'mypage.php'><i class='material-icons'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a href = 'more.php'><i class='material-icons'>more</i></a></li>
         </ul>
@@ -222,7 +242,7 @@
     	var selected_tags = ["0","0","0","0","0","0","0","0","0","0","0"];
     	function func1(args)
     	{
-        if(args != '0'){
+        if(args != '0' && args != '-1' && args != '-2' && args != '-3' && args != '-4'){
       		var x = document.getElementById("tag"+args);
       		if (selected_tags[parseInt(args)-1] == "tag")
       		{
@@ -245,7 +265,7 @@
           }
           start(select_all, args);
         }
-        else{
+        else if(args == '0'){
           var x = document.getElementById("search");
           var search = x.value;
           var store_name = <?=json_encode($store_name)?>;
@@ -258,7 +278,110 @@
           }
           start(select_all, args);
         }
+        else{
+          if (navigator.geolocation) { // GPS를 지원하면
+            var store_name = <?=json_encode($store_name)?>;
+            var lat = <?=json_encode($lat)?>;
+            var lng = <?=json_encode($lng)?>;
+            var select_all = [];
+
+            navigator.geolocation.getCurrentPosition(function(position) {
+              for(var i in store_name){
+                var dis = getDistanceFromLatLonInKm(lat[i],lng[i],position.coords.latitude, position.coords.longitude)/1000;
+                if(args == '-1' && dis < 100){
+                  select_all.push(i);
+                  var x4 = document.getElementById('dist-nav').children[0].children[0].style;
+                  var x3 = document.getElementById('dist-nav').children[0].children[1].style;
+                  var x2 = document.getElementById('dist-nav').children[0].children[2].style;
+                  var x1 = document.getElementById('dist-nav').children[0].children[3].style;
+                  x1.color = 'white';
+                  x1.backgroundColor = 'orange';
+                  x2.color = 'orange';
+                  x2.backgroundColor = 'white';
+                  x3.color = 'orange';
+                  x3.backgroundColor = 'white';
+                  x4.color = 'orange';
+                  x4.backgroundColor = 'white';
+                }
+                else if(args == '-2' && dis < 300){
+                  select_all.push(i);
+                  var x4 = document.getElementById('dist-nav').children[0].children[0].style;
+                  var x3 = document.getElementById('dist-nav').children[0].children[1].style;
+                  var x2 = document.getElementById('dist-nav').children[0].children[2].style;
+                  var x1 = document.getElementById('dist-nav').children[0].children[3].style;
+                  x1.color = 'orange';
+                  x1.backgroundColor = 'white';
+                  x2.color = 'white';
+                  x2.backgroundColor = 'orange';
+                  x3.color = 'orange';
+                  x3.backgroundColor = 'white';
+                  x4.color = 'orange';
+                  x4.backgroundColor = 'white';
+                }
+                else if(args == '-3' && dis < 500){
+                  select_all.push(i);
+                  var x4 = document.getElementById('dist-nav').children[0].children[0].style;
+                  var x3 = document.getElementById('dist-nav').children[0].children[1].style;
+                  var x2 = document.getElementById('dist-nav').children[0].children[2].style;
+                  var x1 = document.getElementById('dist-nav').children[0].children[3].style;
+                  x1.color = 'orange';
+                  x1.backgroundColor = 'white';
+                  x2.color = 'orange';
+                  x2.backgroundColor = 'white';
+                  x3.color = 'white';
+                  x3.backgroundColor = 'orange';
+                  x4.color = 'orange';
+                  x4.backgroundColor = 'white';
+                }
+                else if(args == '-4' && dis < 1000){
+                  select_all.push(i);
+                  var x4 = document.getElementById('dist-nav').children[0].children[0].style;
+                  var x3 = document.getElementById('dist-nav').children[0].children[1].style;
+                  var x2 = document.getElementById('dist-nav').children[0].children[2].style;
+                  var x1 = document.getElementById('dist-nav').children[0].children[3].style;
+                  x1.color = 'orange';
+                  x1.backgroundColor = 'white';
+                  x2.color = 'orange';
+                  x2.backgroundColor = 'white';
+                  x3.color = 'orange';
+                  x3.backgroundColor = 'white';
+                  x4.color = 'white';
+                  x4.backgroundColor = 'orange';
+                }
+              }
+              start(select_all, args);
+            }, function(error) {
+
+            }, {
+              enableHighAccuracy: false,
+              maximumAge: 0,
+              timeout: Infinity
+            });
+          } else {
+            alert('GPS를 지원하지 않습니다');
+          }
+
+
+        }
+
     	}
+    function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+      var R = 6371; // Radius of the earth in km
+      var dLat = deg2rad(lat2-lat1);  // deg2rad below
+      var dLon = deg2rad(lon2-lon1);
+      var a =
+        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) *
+        Math.sin(dLon/2) * Math.sin(dLon/2)
+        ;
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      var d = R * c; // Distance in km
+      return d;
+    }
+
+    function deg2rad(deg) {
+      return deg * (Math.PI/180)
+    }
   	</script>
     <script>
 
@@ -281,7 +404,7 @@
           zoomControl: true,
           minZoom:11
         });
-        if(args2 != '0'){
+        if(args2 != '0' && args2!= '-1' && args2!= '-2' && args2!= '-3' && args2!= '-4'){
           if(args1 == undefined) return;
           //marker -------------------------------------------------------------------------------------------------------------
           var marker = [];
@@ -305,8 +428,8 @@
                     '<div class="expl-each">',
                     ' <h1>'+s_name[i]+'</h1>',
                     '<br>',
-                    ' <h2>'+txt[i].slice(0,10)+'</h2>',
-                    ' <div class="button"><ul><li><a href = "resv.php?i='+i+'">바로예약</a></li><li>상세보기</li></ul></div>',
+                    ' <h2>'+txt[i].slice(0,10)+'...</h2>',
+                    ' <div class="button"><ul><li><a href = "resv.php?i='+x+'">바로예약</a></li><li><a href = "storemore.php?i='+i+'" style "color: orange;">상세보기</a></li></ul></div>',
                     '</div>'
               ].join('');
             }
@@ -363,8 +486,8 @@
                     '<div class="expl-each">',
                     ' <h1>'+s_name[i]+'</h1>',
                     '<br>',
-                    ' <h2>'+txt[i].slice(0,10)+'</h2>',
-                    ' <div class="button"><ul><li><a href = "resv.php?i='+i+'">바로예약</a></li><li>상세보기</li></ul></div>',
+                    ' <h2>'+txt[i].slice(0,10)+'...</h2>',
+                    ' <div class="button"><ul><li><a href = "resv.php?i='+x+'">바로예약</a></li><li><a href = "storemore.php?i='+i+'" style "color: orange;">상세보기</a></li></ul></div>',
                     '</div>'
               ].join('');
             }

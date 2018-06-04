@@ -32,6 +32,51 @@
         font-size: 14px;
         margin: 3px;
       }
+      div.email_login
+  	  {
+    		margin-left: 10%;
+    		width: 80%;
+  	  }
+      div.kakao_login
+     {
+       color: #663300;
+       background-color: #ffe700;
+       margin-left: 12%;
+       width: 76%;
+       text-align: center;
+       margin-top: 5px;
+       }
+     div.google_login
+     {
+       color: white;
+       background-color: #d60000;
+       margin-left: 12%;
+       width: 76%;
+       text-align: center;
+       margin-top: 5px;
+     }
+     div.email_login
+     {
+       margin-left: 10%;
+       width: 80%;
+     }
+    input[type=text]
+    {
+       border: none;
+       border-bottom: 1px solid LightGray;
+       color: LightGray;
+       float: right;
+    }
+    input[type=password]
+    {
+       border: none;
+       border-bottom: 1px solid LightGray;
+       color: LightGray;
+       float: right;
+    }
+    a:hover{
+       text-decoration: none;
+     }
     </style>
   </head>
 
@@ -47,34 +92,66 @@
     <article id = 'main_info'>
       <div id = 'intro'>
           <br/><br/>
-            <div id = 'login-box'>
-              <div class = 'container'>
-                <h1>Email 로그인</h1>
-                <p id = 'emailloginbox'></p>
-                <div style = 'margin-left: 10%;'>
-                  <form action="loginOK.php" method="post">
-                    <p>ID<br><input type="text" name = 'user_id' style = 'color: black;'></p>
-                    <p>PW<br><input type="password" name = 'user_pw' style = 'color: black;'></p>
-                    <p style = 'color: black; font-size: 15px;'><input type="submit" value="로그인"></p>
-                  </form>
-                </div>
-              </div>
-              <div class = 'container'>
-                <h1>kakaotalk</h1>
-              </div>
-              <div class = 'container'>
-                <h1>google</h1>
+          <div id = 'login-box'>
+            <div class = 'email_login'>
+              <h1>Email 로그인</h1>
+              <p id = 'emailloginbox'></p>
+              <div style = 'margin-left: 10%;'>
+                <form action="loginOK.php" method="post">
+                  <p>ID<input type="text" name = 'user_id' style = 'color: black;'></p>
+                  <p>PW<input type="password" name = 'user_pw' style = 'color: black;'></p>
+                  <p style = 'color: black; font-size: 10px; float: right;'><input type="submit" value="로그인"></p>
+                </form>
               </div>
             </div>
-            <h1><a href = 'join.php'>아직 회원이 아니신가요?</a></h1>
+          </div>
+
+          <br><br><br>
+          <div style = "text-align:center;">
+  			  	<div style="width:36%; float: left; margin-left: 6%;"><hr></div>or<div style="width:36%; margin-right: 6%; float: right;"><hr></div>
+          </div>
+          <br>
+
+          <h1><a href = 'join.php'>아직 회원이 아니신가요?</a></h1>
+
+          <br>
+          <div style = "text-align:center;">
+   			  <div style="width:36%; float: left; margin-left: 6%;"><hr></div>or<div style="width:36%; margin-right: 6%; float: right;"><hr></div>
+          </div>
+          <br>
+
+          <div style = "text-align:center;">
+  			  	<div style="width:36%; float: left; margin-left: 6%;"></div><h1>점장님이시라면</h1><div style="width:36%; margin-right: 6%; float: right;"></div>
+          </div>
+          <br>
+
+          <a href = "https://kauth.kakao.com/oauth/authorize?client_id=15285051117635b48ab62f850b0dba96&redirect_uri=http://localhost/kakao.php&response_type=code" id='stat'>
+            <div class = 'kakao_login'>
+              <img src = "img/kakao_logo.png" alt = "kakao_logo" style= "display: inline; width: 20px;"> kakaotalk
+            </div>
+          </a>
+
+
+          <a href = "firebase.php">
+            <div class = 'google_login'>
+              <img src = "img/google_logo.png" alt = "google_logo" style= "display: inline; width: 15px;"> google
+            </div>
+          </a>
+
+          <br>
+
+          <div style = "text-align:center;">
+  			  	<div style="width:36%; float: left; margin-left: 6%;"></div><h1>으로 로그인이 가능합니다</h1><div style="width:36%; margin-right: 6%; float: right;"></div>
+          </div>
+
       </div>
 
     </article>
     <footer>
       <nav>
         <ul style='margin-bottom: 0;'>
+          <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
-          <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'mypage'><a href = 'mypage.php'><i class='material-icons'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a href = 'more.php'><i class='material-icons'>more</i></a></li>
         </ul>

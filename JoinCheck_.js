@@ -1,17 +1,13 @@
 var IDVali = false;
 var PWVali = false;
 var EMVali = false;
-var PHVali = false;
-var BTVali = false;
 var NVali = false;
 var NickVali = false;
 function start()
 {
   document.getElementById('ID').addEventListener("change", function(){checkID(this.value);}, false);
   document.getElementById('PW').addEventListener("change", function(){checkPW(this.value);}, false);
-  document.getElementById('PHN').addEventListener("change", function(){checkPH(this.value);}, false);
   document.getElementById('EMN').addEventListener("change", function(){checkEM(this.value);}, false);
-  document.getElementById('BTN').addEventListener("change", function(){checkBT(this.value);}, false);
   document.getElementById('Nick').addEventListener("change", function(){checkNick(this.value);}, false);
   document.getElementById('NAME').addEventListener("change", function(){checkN(this.value);}, false);
 }
@@ -83,44 +79,6 @@ function checkEM(data)
   checking();
 }
 
-function checkBT(data)
-{
-  BTVali = true;
-  var month = data.substr(2,2);
-  var numb = [4, 6, 9, 11]
-  var date = data.substr(4,2);
-
-  if(data.length!=6){BTVali=false;}
-  if(data<0){BTVali=false;}
-  if((month<1)||(month>12)){BTVali=false;}
-  if(date>0&&BTVali==true)
-  {
-    if(month==2&&date<30){BTVali=true;}
-    else if(numb.indexOf(month)!=-1&&date<31){BTVali=true;}
-    else if(date<32){BTVali=true;}
-    else{BTVali=false;}
-  }
-  if(!BTVali){document.getElementById('eBTN').innerHTML = "알맞은 생년월일을 기입하세요.";}
-  else{document.getElementById('eBTN').innerHTML = "";}
-
-  checking();
-}
-
-function checkPH(data)
-{
-  if(isNaN(data)){PHVali=false;}
-  else if(data.length<10||data.length>11){PHVali = false;}
-  else{PHVali=true;}
-
-  if(!PHVali)
-  {
-      document.getElementById('ePHN').innerHTML = "알맞은 전화번호를 기입하세요.";
-  }
-  else{document.getElementById('ePHN').innerHTML = "";}
-
-  checking();
-}
-
 function checkNick(data)
 {
   var an = /^[^ㄱ-힣a-zA-Z0-9]*$/;
@@ -148,7 +106,7 @@ function checkN(data)
 
 function checking()
 {
-  if(IDVali==true&&PWVali==true&&EMVali==true&&PHVali==true&&BTVali==true&&NVali==true&&NickVali==true)
+  if(IDVali==true&&PWVali==true&&EMVali==true&&NVali==true&&NickVali==true)
   {
     document.getElementById('joinbutton').disabled = false;
   }

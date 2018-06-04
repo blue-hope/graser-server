@@ -16,7 +16,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="joinCheck.js"></script>
+    <script src="joinCheck_.js"></script>
 
     <!--font-->
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:700" rel="stylesheet">
@@ -75,10 +75,6 @@
             <p id="eNAME" style="color:red"></p>
             <p>닉네임 : <br> <input id="Nick" type="text" name = "user_nick" required></p>
             <p id="eNick" style="color:red"></p>
-            <p>전화번호 : <br> <input id="PHN" type="tel" placeholder="01012345678" name = "user_phone" required></p>
-            <p id="ePHN" style="color:red"></p>
-            <p>생일 : <br> <input id="BTN" type="number" placeholder="YYMMDD" name = "user_birth" required></p>
-            <p id="eBTN" style="color:red"></p>
             <p>이메일 : <br> <input id="EMN" type="text" name = "user_email" required></p>
             <p id="eEMN" style="color:red"></p>
             <p><input id="joinbutton" type="submit" value="가입" disabled></p>
@@ -90,8 +86,8 @@
     <footer>
       <nav>
         <ul style = 'height: 56px;'>
+          <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
-          <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'mypage'><a href = 'mypage.php'><i class='material-icons'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a href = 'more.php'><i class='material-icons'>more</i></a></li>
         </ul>

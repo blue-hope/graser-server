@@ -8,6 +8,12 @@
     exit;
   }
 
+  if(!isset($_SESSION['user_N'])){
+    echo "<script>alert('로그인이 필요한 서비스입니다.');</script>";
+    echo "<script>window.location.replace('login.html');</script>";
+  }
+
+
   $sql = "SELECT * FROM stores WHERE user_N = '".$_SESSION['user_N']."'";
   $result = mysqli_query($conn, $sql);
   $res = mysqli_fetch_assoc($result);
@@ -23,23 +29,41 @@
   }
 
   $sql2 = "SELECT * FROM resvs WHERE user_N = '".$_SESSION['user_N']."' and checked = false";
-  $result2 = mysqli_query($conn, $sql2);
-  if($result2){
-    while($row = mysqli_fetch_assoc($result2)){
-      $resv_m[] = $row['month'];
-      $resv_d[] = $row['day'];
-      $resv_y[] = $row['year'];
-      $resv_expl[] = $row['expl'];
-    }
-    $resv_num = sizeof($resv_m);
+  if($_SESSION['resv'] != '0'){
+    $result2 = mysqli_query($conn, $sql2);
+    if($result2){
+      while($row = mysqli_fetch_assoc($result2)){
+        $resv_m[] = $row['month'];
+        $resv_d[] = $row['day'];
+        $resv_y[] = $row['year'];
+        $resv_expl[] = $row['expl'];
+      }
+      if(!isset($resv_m)){
+        $resv_num = 0;
+        $resv_m = [];
+        $resv_d = [];
+        $resv_y = [];
+        $resv_expl = [];
+      }
+      else
+        $resv_num = sizeof($resv_m);
 
-    mysqli_close($conn);
+      mysqli_close($conn);
+    }
+    else{
+      echo "<script>alert('데이터 베이스를 읽는데 실패했습니다!');</script>";
+      echo "<script>window.location.replace('mypage.php');</script>";
+      mysqli_close($conn);
+    }
   }
   else{
-    echo "<script>alert('데이터 베이스를 읽는데 실패했습니다!');</script>";
-    echo "<script>window.location.replace('mypage.php');</script>";
-    mysqli_close($conn);
+    $resv_num = 0;
+    $resv_m = [];
+    $resv_d = [];
+    $resv_y = [];
+    $resv_expl = [];
   }
+
  ?>
 <html>
   <head>
@@ -166,10 +190,13 @@
               }
               elseif($_SESSION['user_type'] == '1'){
                 echo "<h1>점주님계정 접속중</h1>";
-                if($resv_num == 0)
+                if($_SESSION['resv'] == '0')
                   echo "<div class = 'more' onclick = 'res_in_info()'>예약관리</div>";
                 else {
-                  echo "<div class = 'more' onclick = 'res_in_info()'>예약관리(".$resv_num.")</div>";
+                  if($resv_num == 0)
+                    echo "<div class = 'more' onclick = 'res_in_info()'>예약관리</div>";
+                  else
+                    echo "<div class = 'more' onclick = 'res_in_info()'>예약관리(".$resv_num.")</div>";
                 }
                 echo "<div class = 'open' id = 'res_in_info'></div>";
                 echo "<div class = 'more' onclick = 'res_upload()'>예약정보업로드</div>";
@@ -194,8 +221,8 @@
     <footer>
       <nav>
         <ul style = 'height: 56px;'>
+          <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
-          <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'mypage' style = 'background-color: orange;'><a href = 'mypage.php'><i class='material-icons' style = 'color: white;'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a href = 'more.php'><i class='material-icons'>more</i></a></li>
         </ul>
@@ -321,67 +348,83 @@
     </script>
     <script>
       function res_in_info(){
+        var x = <?=$_SESSION['resv']?>;
         var ele = document.getElementById('res_in_info');
         var ele2 = document.getElementsByClassName('more');
-        if('<?=$resv_num?>' == 0)
-          ele.innerHTML = "<h1>현재 예약 대기 수는 0개입니다.</h1>";
-        else {
-          var resv_y = <?=json_encode($resv_y)?>;
-          var resv_m = <?=json_encode($resv_m)?>;
-          var resv_d = <?=json_encode($resv_d)?>;
-          for(var i in resv_m){
-            {
-              if(resv_m[i] == 'January')
-                resv_m[i] = 1;
-              else if(resv_m[i] == 'February')
-                resv_m[i] = 2;
-              else if(resv_m[i] == 'March')
-                resv_m[i] = 3;
-              else if(resv_m[i] == 'April')
-                resv_m[i] = 4;
-              else if(resv_m[i] == 'May')
-                resv_m[i] = 5;
-              else if(resv_m[i] == 'June')
-                resv_m[i] = 6;
-              else if(resv_m[i] == 'July')
-                resv_m[i] = 7;
-              else if(resv_m[i] == 'August')
-                resv_m[i] = 8;
-              else if(resv_m[i] == 'September')
-                resv_m[i] = 9;
-              else if(resv_m[i] == 'October')
-                resv_m[i] = 10;
-              else if(resv_m[i] == 'November')
-                resv_m[i] = 11;
-              else if(resv_m[i] == 'December')
-                resv_m[i] = 12;
-              else {
-                resv_m[i] = 0;
-              }
-            }
+        if(x == 0){
+          ele.innerHTML = "<h1>등록된 지점이 없습니다</h1><h1>등록하시겠습니까?</h1> \r\n <div class = \"k\" onclick = 'window.location=\"store.php\"'>등록</div><div class = \"k\" onclick = \"res_info()\">닫기</div>";
+          if(ele2[0].style.backgroundColor == "white"){
+            ele2[0].style.backgroundColor = "orange";
+            ele2[0].style.color = "white";
+            ele.style.border = "1px solid orange";
           }
-          var resv_expl = <?=json_encode($resv_expl)?>;
-          var inner = "<h1>현재 예약 대기 수는 <?=$resv_num?>개입니다.</h1> <br><h1>목록</h1><br>";
-          for(var i = 0; i < <?=$resv_num?>; i++){
-            var num = parseInt(i)+1;
-            inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + resv_expl[i] + "</h2><h2 style = 'margin: 0;'>" + resv_y[i] + "년 " + resv_m[i] + "월 " + resv_d[i] + "일 </h2>";
-            inner += "<a style = 'font-size: 13px; margin: 0; padding-left: 10%; padding-bottom: 3px;' href = 'resv_permission.php?expl='" + resv_expl[i] + ">예약승인</a></div><hr>";
+          else{
+            ele2[0].style.backgroundColor = "white";
+            ele2[0].style.color = "orange";
+            ele.innerHTML = "";
+            ele.style.border = "";
           }
-          ele.innerHTML = inner;
-        }
-
-        if(ele2[0].style.backgroundColor == "white"){
-          ele2[0].style.backgroundColor = "orange";
-          ele2[0].style.color = "white";
-          ele.style.border = "1px solid orange";
         }
         else{
-          ele2[0].style.backgroundColor = "white";
-          ele2[0].style.color = "orange";
-          ele.innerHTML = "";
-          ele.style.border = "";
-        }
+          if('<?=$resv_num?>' == '0')
+            ele.innerHTML = "<h1>현재 예약 대기 수는 0개입니다.</h1>";
+          else {
+            var resv_y = <?=json_encode($resv_y)?>;
+            var resv_m = <?=json_encode($resv_m)?>;
+            var resv_d = <?=json_encode($resv_d)?>;
+            for(var i in resv_m){
+              {
+                if(resv_m[i] == 'January')
+                  resv_m[i] = 1;
+                else if(resv_m[i] == 'February')
+                  resv_m[i] = 2;
+                else if(resv_m[i] == 'March')
+                  resv_m[i] = 3;
+                else if(resv_m[i] == 'April')
+                  resv_m[i] = 4;
+                else if(resv_m[i] == 'May')
+                  resv_m[i] = 5;
+                else if(resv_m[i] == 'June')
+                  resv_m[i] = 6;
+                else if(resv_m[i] == 'July')
+                  resv_m[i] = 7;
+                else if(resv_m[i] == 'August')
+                  resv_m[i] = 8;
+                else if(resv_m[i] == 'September')
+                  resv_m[i] = 9;
+                else if(resv_m[i] == 'October')
+                  resv_m[i] = 10;
+                else if(resv_m[i] == 'November')
+                  resv_m[i] = 11;
+                else if(resv_m[i] == 'December')
+                  resv_m[i] = 12;
+                else {
+                  resv_m[i] = 0;
+                }
+              }
+            }
+            var resv_expl = <?=json_encode($resv_expl)?>;
+            var inner = "<h1>현재 예약 대기 수는 <?=$resv_num?>개입니다.</h1> <br><h1>목록</h1><br>";
+            for(var i = 0; i < <?=$resv_num?>; i++){
+              var num = parseInt(i)+1;
+              inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + resv_expl[i] + "</h2><h2 style = 'margin: 0;'>" + resv_y[i] + "년 " + resv_m[i] + "월 " + resv_d[i] + "일 </h2>";
+              inner += "<a style = 'font-size: 13px; margin: 0; padding-left: 10%; padding-bottom: 3px;' href = 'resv_permission.php?expl='" + resv_expl[i] + ">예약승인</a></div><hr>";
+            }
+            ele.innerHTML = inner;
+          }
 
+          if(ele2[0].style.backgroundColor == "white"){
+            ele2[0].style.backgroundColor = "orange";
+            ele2[0].style.color = "white";
+            ele.style.border = "1px solid orange";
+          }
+          else{
+            ele2[0].style.backgroundColor = "white";
+            ele2[0].style.color = "orange";
+            ele.innerHTML = "";
+            ele.style.border = "";
+          }
+        }
       }
     </script>
   </body>

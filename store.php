@@ -184,8 +184,8 @@
     <footer>
       <nav>
         <ul style = 'height: 56px;'>
+          <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
-          <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'mypage' style = 'background-color: orange;'><a href = 'mypage.php'><i class='material-icons' style = 'color: white;'>info</i></a></li>
           <li id = 'more' style = 'border-right: 0;'><a href = 'more.php'><i class='material-icons'>more</i></a></li>
         </ul>

@@ -1,11 +1,19 @@
 <!DOCTYPE HTML>
  <?php session_start();
  $id = $_GET['i'];
+ if($id == 'x'){
+   echo "<script>window.location = 'login.html'";
+ }
  $conn = mysqli_connect("localhost", "root", "kwondong704","users");
  if(!$conn){
    print "Error - Could not connect to MySQL: ".mysqli_error();
    exit;
  }
+ if(!isset($_SESSION['user_N'])){
+   mysqli_close($conn);
+   echo "<script>alert('로그인 먼저 해주세요'); window.location = 'login.html';</script>";
+ }
+
  $isdate = 't';
  $sql = "SELECT * FROM stores";
  $result = mysqli_query($conn, $sql);
@@ -14,10 +22,8 @@
  if($result && $result2){
    while($row = mysqli_fetch_assoc($result)){
      $store_name[] = $row['store'];
-     $ppl[] = $row['ppl'];
    }
    $select_name = $store_name[$id];
-   $select_ppl = $store_name[$id];
 
    while($row = mysqli_fetch_assoc($result2)){
      $resv_m[] = $row['month'];
@@ -228,8 +234,8 @@
      <footer>
        <nav>
          <ul style = 'height: 56px;'>
+           <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
            <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
-           <li id = 'review'><a href = 'review.php'><i class='material-icons'>assignment</i></a></li>
            <li id = 'mypage'><a href = 'mypage.php'><i class='material-icons'>info</i></a></li>
            <li id = 'more' style = 'border-right: 0;'><a href = 'more.php'><i class='material-icons'>more</i></a></li>
          </ul>
