@@ -162,7 +162,7 @@
           <br>
           <h1>예약할 장소</h1>
           <br>
-          <div style = 'margin-left: 20%; margin-right: 0;'>
+          <div style = 'margin-left: 15%; margin-right: 0;'>
             <input type = 'text' style='margin-left: 8%;' id = 'search' onkeyup="func1('0')" autocomplete="on" placeholder="음식점/술집 이름으로 찾기"/>
           </div>
           <br>
@@ -229,6 +229,8 @@
           $lat[] = $row['lat'];
           $lng[] = $row['lng'];
           $txt[] = $row['txt'];
+          $store_N[] = $row['store_N'];
+          $review[] = $row['reviews'];
         }
         mysqli_close($conn);
       }
@@ -240,6 +242,7 @@
     ?>
     <script type = "text/javascript">
     	var selected_tags = ["0","0","0","0","0","0","0","0","0","0","0"];
+      var selected = [];
     	function func1(args)
     	{
         if(args != '0' && args != '-1' && args != '-2' && args != '-3' && args != '-4'){
@@ -284,9 +287,12 @@
             var lat = <?=json_encode($lat)?>;
             var lng = <?=json_encode($lng)?>;
             var select_all = [];
-
+            if(selected.length == 0){
+              alert("검색과 태그로 필터링된 가게가 없습니다!");
+              return;
+            }
             navigator.geolocation.getCurrentPosition(function(position) {
-              for(var i in store_name){
+              for(var i in selected){
                 var dis = getDistanceFromLatLonInKm(lat[i],lng[i],position.coords.latitude, position.coords.longitude)/1000;
                 if(args == '-1' && dis < 100){
                   select_all.push(i);
@@ -382,8 +388,6 @@
     function deg2rad(deg) {
       return deg * (Math.PI/180)
     }
-  	</script>
-    <script>
 
       function start(args1, args2)
       {
@@ -396,6 +400,7 @@
       var s_name = <?=json_encode($store_name)?>;
       var s_tag = <?=json_encode($store_tag)?>;
       var txt = <?=json_encode($txt)?>;
+      var reviews = <?=json_encode($review)?>;
       function init(args1, args2)
       {
         var map = new naver.maps.Map('map', {
@@ -419,6 +424,8 @@
 
           //Explain-----------------------------------------------------------------------------------------------------------------
           var expl = [];
+          selected = [];
+
           for(var i = 0; i < lat.length; i++){
             var x;
             if('<?=$isuser?>'=='t')  x = i;
@@ -429,13 +436,15 @@
                     ' <h1>'+s_name[i]+'</h1>',
                     '<br>',
                     ' <h2>'+txt[i].slice(0,10)+'...</h2>',
-                    ' <div class="button"><ul><li><a href = "resv.php?i='+x+'">바로예약</a></li><li><a href = "storemore.php?i='+i+'" style "color: orange;">상세보기</a></li></ul></div>',
+                    ' <div class="button"><ul><li><a href = "resv.php?i='+x+'">바로예약</a></li><li><a href = "storemore.php?i='+i+'" style "color: orange;">상세보기</a></li><li>리뷰('+reviews[i]+')</li></ul></div>',
                     '</div>'
               ].join('');
+              selected.push(i);
             }
             else{
               expl[i] = '0';
             }
+
           }
           var expl_s = "";
           for(var i = 0; i < lat.length; i++){
@@ -477,6 +486,7 @@
           }
           //Explain-----------------------------------------------------------------------------------------------------------------
           var expl = [];
+          selected = [];
           for(var i = 0; i < lat.length; i++){
             var x;
             if('<?=$isuser?>'=='t')  x = i;
@@ -490,10 +500,12 @@
                     ' <div class="button"><ul><li><a href = "resv.php?i='+x+'">바로예약</a></li><li><a href = "storemore.php?i='+i+'" style "color: orange;">상세보기</a></li></ul></div>',
                     '</div>'
               ].join('');
+              selected.push(i);
             }
             else{
               expl[i] = '0';
             }
+
           }
           var expl_s = "";
           for(var i = 0; i < lat.length; i++){

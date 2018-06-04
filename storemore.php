@@ -17,12 +17,19 @@ if($result){
     $tag[] = $row['tag'];
     $lat[] = $row['lat'];
     $lng[] = $row['lng'];
+    $review_num[] = $row['reviews'];
+    $store_N[] = $row['store_N'];
+    $love[] = $row['love'];
   }
   $select_name = $store_name[$id];
   $select_ppl = $ppl[$id];
   $select_txt = $txt[$id];
   $select_lat = $lat[$id];
   $select_lng = $lng[$id];
+  $select_num = $review_num[$id];
+  $select_N = $store_N[$id];
+  $select_love = $love[$id];
+
   if($tag[$id] == '1')
     $select_tag = '고기구이';
   elseif($tag[$id] == '2')
@@ -55,6 +62,36 @@ else{
 }
 
 ?>
+<?php
+  $reviewer = [];
+  $reviewtxt = [];
+  $conn = mysqli_connect("localhost", "root", "kwondong704","users");
+  if(!$conn){
+    print "Error - Could not connect to MySQL: ".mysqli_error();
+    exit;
+  }
+  $sql = "SELECT * FROM reviews where store_N = '".$select_N."'";
+  $result = mysqli_query($conn, $sql);
+  while($row = mysqli_fetch_assoc($result)){
+
+    $reviewer_in_int[] = $row['user_N'];
+    $reviewtxt[] = $row['txt'];
+
+  }
+
+  for($i = 0; $i < sizeof($reviewer_in_int); $i++){
+    $sql2 = "SELECT * FROM users where user_N = '".$reviewer_in_int[$i]."'";
+    $result2  = mysqli_query($conn, $sql2);
+    $res2 = mysqli_fetch_assoc($result2);
+    $reviewer[] = $res2['user_Nick'];
+    $reviewtype[] = $res2['user_Type'];
+  }
+
+
+
+
+
+ ?>
 <html>
   <head>
     <title>
@@ -274,10 +311,39 @@ else{
           </div>
           <div id ="map" style = "width:100%;height:300px;"></div>
           <br>
-          <div class = 'more' style = 'background-color: orange; color: white;'>리뷰</div>
-          <div id = "review" style = "width: 100%;"></div>
+          <div class = 'more' style = 'background-color: orange; color: white; margin-bottom: 0; border-bottom: none;'>리뷰</div>
+          <div class = 'more' style = 'background-color: orange; color: white; margin-bottom: 0; margin-top: 0; border-bottom: none;'>( 점주님 리뷰는 분홍색입니다 )</div>
+          <?php
+            echo "<div class = 'more' style = 'margin-top: 0; border-top: none;'>리뷰수: ".sizeof($review_num)."</div>";
+           ?>
+          <?php
+          if($review_num == 0){
+            echo "<div id = 'review' style = 'width: 100%; border: 1px solid orange'><h1 style = 'color: orange;'>아직 등록된 리뷰가 없습니다!</h1><h1 style = 'color: orange;'>리뷰를 등록해주세요!</h1></div>";
+          }
+          else{
+            for($i = 0; $i < sizeof($reviewtxt); $i++){
+              if($reviewtype == '0'){
+                $str = "";
+                $str = $str."<div id = 'review' style = 'width: 100%; border: 1px solid orange; color: orange;'><span style = 'background-color: orange; color: white;'>";
+                $str = $str."작성자: ".$reviewer[$i]."&nbsp;</span><span>리뷰:  ".$reviewtxt[$i]."</span>";
+                $str = $str."</div>";
+                echo $str;
+              }
+              else{
+                $str = "";
+                $str = $str."<div id = 'review' style = 'width: 100%; border: 1px solid orange; color: orange;'><span style = 'background-color: #fa8072; color: white;'>";
+                $str = $str."작성자: ".$reviewer[$i]."&nbsp;</span><span>리뷰:  ".$reviewtxt[$i]."</span>";
+                $str = $str."</div>";
+                echo $str;
+              }
+            }
+          }
+          ?>
+          <br><br>
           <div class = "kback" style = 'float: left;'><a href = 'find.php' style = 'color: white;'>뒤로가기</a></div>
-          <div class = "kedit" style = 'float: right;'><a href = 'review.php?i=<?=$id?>' style = 'color: white;'>리뷰보기</a></div>
+          <div class = "kedit" style = 'float: right; color: white;' onclick = 'review()'>리뷰쓰기</div>
+          <div style = 'width: 50%; margin: 0 auto;' ><input id = "reviewin" type = 'txt' value = '' maxlength = '30' style = 'width: 100%;' placeholder = '여기에 리뷰를 써주세요!'></input></div>
+
           <br><br>
       </div>
 
@@ -292,6 +358,26 @@ else{
         </ul>
       </nav>
     </footer>
+    <script>
+      function review(){
+        var x = document.getElementById('reviewin').value;
+        var form = document.createElement("form");
+    		form.setAttribute("method", "POST");
+    		form.setAttribute("action", "review.php?i=<?=$id?>");
+    		var hiddenField = document.createElement("input");
+    		hiddenField.setAttribute("type", "hidden");
+    		hiddenField.setAttribute("name", "reviewer");
+    		hiddenField.setAttribute("value", <?=$_SESSION['user_N']?>);
+    		form.appendChild(hiddenField);
+    		var hiddenField1 = document.createElement("input");
+    		hiddenField1.setAttribute("type", "hidden");
+    		hiddenField1.setAttribute("name", "review");
+    		hiddenField1.setAttribute("value", x);
+    		form.appendChild(hiddenField1);
+    		document.body.appendChild(form);
+    		form.submit();
+      }
+    </script>
   </body>
 
 </html>
