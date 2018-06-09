@@ -152,7 +152,7 @@
         			  <div class = "tag" id = "tag8" onclick ="func1('8')">일본식</div>
         			  <div class = "tag" id = "tag9" onclick ="func1('9')">국물요리</div>
         			  <div class = "tag" id = "tag10" onclick ="func1('10')">회</div>
-        			  <div class = "tag" id = "tag1" onclick ="func1('11')">그 외</div>
+        			  <div class = "tag" id = "tag11" onclick ="func1('11')">그 외</div>
                 <input type = "hidden" id = "tag" value = ""/>
                 <h1 id = "describe"></h1>
               </div>
@@ -241,7 +241,7 @@
             var i_p = parseInt(i) + 1;
             var hid = document.getElementById("tag");
             hid.value = i_p;
-            var desc = document.getElementById("describe").innerText;
+            var desc = document.getElementById("describe").innerHTML;
             if(i_p == 1)
               desc = "삼겹살, 곱창, 소고기 등 구워먹는 요리가 대표 메뉴이신가요?";
             else if(i_p == 2)
