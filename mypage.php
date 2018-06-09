@@ -28,9 +28,11 @@
     mysqli_close($conn);
   }
 
-  $sql2 = "SELECT * FROM resvs WHERE user_N = '".$_SESSION['user_N']."' and checked = false";
+  $sql2 = "SELECT * FROM resvs WHERE resvto = '".$_SESSION['user_N']."' and checked = false";//점주
+  $sql3 = "SELECT * FROM resvs WHERE user_N = '".$_SESSION['user_N']."'";//손님
   if($_SESSION['resv'] != '0'){
     $result2 = mysqli_query($conn, $sql2);
+    $result3 = mysqli_query($conn, $sql3);
     if($result2){
       while($row = mysqli_fetch_assoc($result2)){
         $resv_m[] = $row['month'];
@@ -48,12 +50,29 @@
       else
         $resv_num = sizeof($resv_m);
 
-      mysqli_close($conn);
     }
     else{
       echo "<script>alert('데이터 베이스를 읽는데 실패했습니다!');</script>";
       echo "<script>window.location.replace('mypage.php');</script>";
-      mysqli_close($conn);
+    }
+    if($result3){
+      while($row = mysqli_fetch_assoc($result3)){
+        $uresv_m[] = $row['month'];
+        $uresv_d[] = $row['day'];
+        $uresv_y[] = $row['year'];
+        $uresv_expl[] = $row['expl'];
+        $uresv_check[] = $row['checked'];
+      }
+      if(!isset($uresv_m)){
+        $uresv_num = 0;
+        $uresv_m = [];
+        $uresv_d = [];
+        $uresv_y = [];
+        $uresv_expl = [];
+        $uresv_check = [];
+      }
+      else
+        $uresv_num = sizeof($uresv_m);
     }
   }
   else{
@@ -62,8 +81,14 @@
     $resv_d = [];
     $resv_y = [];
     $resv_expl = [];
+    $uresv_num = 0;
+    $uresv_m = [];
+    $uresv_d = [];
+    $uresv_y = [];
+    $uresv_expl = [];
+    $uresv_check = [];
   }
-
+  mysqli_close($conn);
  ?>
 <html>
   <head>
@@ -179,12 +204,8 @@
                 echo "<h1>손님계정 접속중</h1>";
                 echo "<div class = 'more' onclick = 'res_info()'>현재 예약</div>";
                 echo "<div class = 'open' id = 'res_info'></div>";
-                echo "<div class = 'more'>예약 로그</div>";
-                echo "<div class = 'open' id = 'res_log_info'></div>";
                 echo "<div class = 'more'>리뷰 관리</div>";
                 echo "<div class = 'open' id = 'review_manage'></div>";
-                echo "<div class = 'more'>즐찾정보</div>";
-                echo "<div class = 'open' id = 'star_manage'></div>";
                 echo "<div class = 'more'>계정 관리</div>";
                 echo "<div class = 'open' id = 'id_manage'></div>";
               }
@@ -203,6 +224,8 @@
                 echo "<div class = 'open' id = 'res_upload'></div>";
                 echo "<div class = 'more' onclick = 'res_info()'>지점관리</div>";
                 echo "<div class = 'open' id = 'res_info'></div>";
+                echo "<div class = 'more'>리뷰 관리</div>";
+                echo "<div class = 'open' id = 'review_manage'></div>";
                 echo "<div class = 'more'>계정관리</div>";
                 echo "<div class = 'open' id = 'id_manage2'></div>";
               }
@@ -303,12 +326,83 @@
         if(y == '0'){
           var ele = document.getElementById('res_info');
           var ele2 = document.getElementsByClassName('more');
-
           if(x == 0){
             ele.innerHTML = "<h1>현재 예약 정보가 없습니다</h1> \r\n <div class = \"k\" onclick = \"res_info()\">닫기</div>";
+            if(ele2[0].style.backgroundColor == "white"){
+              ele2[0].style.backgroundColor = "orange";
+              ele2[0].style.color = "white";
+              ele.style.border = "1px solid orange";
+            }
+            else{
+              ele2[0].style.backgroundColor = "white";
+              ele2[0].style.color = "orange";
+              ele.innerHTML = "";
+              ele.style.border = "";
+            }
           }
           else{
-            ele.innerHTML = "<h1>예약확인: </h1>";
+            if('<?=$uresv_num?>' == '0')
+              ele.innerHTML = "<h1>현재 예약 정보가 없습니다</h1> \r\n <div class = \"k\" onclick = \"res_info()\">닫기</div>";
+            else {
+              var uresv_y = <?=json_encode($uresv_y)?>;
+              var uresv_m = <?=json_encode($uresv_m)?>;
+              var uresv_d = <?=json_encode($uresv_d)?>;
+              for(var i in uresv_m){
+                {
+                  if(uresv_m[i] == 'January')
+                    uresv_m[i] = 1;
+                  else if(uresv_m[i] == 'February')
+                    uresv_m[i] = 2;
+                  else if(uresv_m[i] == 'March')
+                    uresv_m[i] = 3;
+                  else if(uresv_m[i] == 'April')
+                    uresv_m[i] = 4;
+                  else if(uresv_m[i] == 'May')
+                    uresv_m[i] = 5;
+                  else if(uresv_m[i] == 'June')
+                    uresv_m[i] = 6;
+                  else if(uresv_m[i] == 'July')
+                    uresv_m[i] = 7;
+                  else if(uresv_m[i] == 'August')
+                    uresv_m[i] = 8;
+                  else if(uresv_m[i] == 'September')
+                    uresv_m[i] = 9;
+                  else if(uresv_m[i] == 'October')
+                    uresv_m[i] = 10;
+                  else if(uresv_m[i] == 'November')
+                    uresv_m[i] = 11;
+                  else if(uresv_m[i] == 'December')
+                    uresv_m[i] = 12;
+                  else {
+                    uresv_m[i] = 0;
+                  }
+                }
+              }
+              var uresv_expl = <?=json_encode($uresv_expl)?>;
+              var uresv_check = <?=json_encode($uresv_check)?>;
+              var falseN = 0;
+              for(var i in uresv_check){
+                if(uresv_check[i] == false){
+                  falseN = parseInt(falseN)+1;
+                }
+              }
+              var trueN = parseInt(<?=$uresv_num?>) - falseN;
+              var inner = "<h1>현재 예약 대기수는 "+falseN+"개입니다.</h1> <br><h1>목록</h1><br>";
+              for(var i = 0; i < <?=$uresv_num?>; i++){
+                if(uresv_check[i] == false){
+                  var num = parseInt(i)+1;
+                  inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + uresv_expl[i] + "</h2><h2 style = 'margin: 0;'>" + uresv_y[i] + "년 " + uresv_m[i] + "월 " + uresv_d[i] + "일 </h2>";
+                }
+              }
+              inner += "<br><hr><br>";
+              inner += "<h1>지금까지 승인된 예약은 모두 "+trueN+"개입니다.</h1> <br><h1>목록</h1><br>";
+              for(var i = 0; i < <?=$uresv_num?>; i++){
+                if(uresv_check[i] == true){
+                  var num = parseInt(i)+1;
+                  inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + uresv_expl[i] + "</h2><h2 style = 'margin: 0;'>" + uresv_y[i] + "년 " + uresv_m[i] + "월 " + uresv_d[i] + "일 </h2>";
+                }
+              }
+              ele.innerHTML = inner;
           }
 
           if(ele2[0].style.backgroundColor == "white"){
@@ -322,7 +416,8 @@
             ele.innerHTML = "";
             ele.style.border = "";
           }
-        }else if(y == '1'){
+        }
+      }else if(y == '1'){
           var ele = document.getElementById('res_info');
           var ele2 = document.getElementsByClassName('more');
 

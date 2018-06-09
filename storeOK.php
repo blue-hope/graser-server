@@ -7,7 +7,6 @@
   $txt = $_POST['txt'];
   $tag = $_POST['tag'];
   $user_N = $_SESSION['user_N'];
-
   $conn = mysqli_connect("localhost", "root", "kwondong704","users");
 
 
@@ -16,7 +15,7 @@
     exit;
   }
 
-  $sql = "INSERT INTO stores VALUES ('0','".$user_N."', '".$lat."', '".$lng."', '".$store."', '".$ppl."', '".$txt."', '".$tag."')";
+  $sql = "INSERT INTO stores VALUES ('0','".$user_N."', '".$lat."', '".$lng."', '".$store."', '".$ppl."', '".$txt."', '".$tag."', '0')";
   $result = mysqli_query($conn, $sql);
 
   if($result){
@@ -31,7 +30,7 @@
   }
   else{
     echo "<script>alert('지점 등록에 실패하였습니다!');</script>";
-    echo "<script>window.location.replace('mypage.php');</script>";
+    //echo "<script>window.location.replace('mypage.php');</script>";
     mysqli_close($conn);
   }
  ?>

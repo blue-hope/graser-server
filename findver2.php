@@ -190,10 +190,10 @@
       <br>
       <div class = 'dist-nav' id = 'dist-nav'>
         <ul>
-          <li style = 'width: 25%;' onclick = "func1('-4')">200명~</li>
-          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-3')">100~200명</li>
-          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-2')">30~100명</li>
-          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-1')">모두보이기</li>
+          <li style = 'width: 25%;' onclick = "func1('-4')">1km이내</li>
+          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-3')">500m이내</li>
+          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-2')">300m이내</li>
+          <li id = 'navleft' style = 'width: 25%;' onclick = "func1('-1')">100m이내</li>
         </ul>
       </div>
       <div id="map" style = "width:100%;height:400px;"></div>
@@ -231,7 +231,6 @@
           $txt[] = $row['txt'];
           $store_N[] = $row['store_N'];
           $review[] = $row['reviews'];
-          $ppl[] = $row['ppl'];
         }
         mysqli_close($conn);
       }
@@ -252,18 +251,6 @@
       		{
       			x.style.backgroundColor = "white";
       			x.style.color = "orange";
-            var x4 = document.getElementById('dist-nav').children[0].children[0].style;
-            var x3 = document.getElementById('dist-nav').children[0].children[1].style;
-            var x2 = document.getElementById('dist-nav').children[0].children[2].style;
-            var x1 = document.getElementById('dist-nav').children[0].children[3].style;
-            x1.color = 'orange';
-            x1.backgroundColor = 'white';
-            x2.color = 'orange';
-            x2.backgroundColor = 'white';
-            x3.color = 'orange';
-            x3.backgroundColor = 'white';
-            x4.color = 'orange';
-            x4.backgroundColor = 'white';
       			selected_tags[parseInt(args)-1] = "0";
       		}
       		else
@@ -271,18 +258,6 @@
       			selected_tags[parseInt(args)-1] = "tag";
       			x.style.backgroundColor = "orange";
       			x.style.color = "white";
-            var x4 = document.getElementById('dist-nav').children[0].children[0].style;
-            var x3 = document.getElementById('dist-nav').children[0].children[1].style;
-            var x2 = document.getElementById('dist-nav').children[0].children[2].style;
-            var x1 = document.getElementById('dist-nav').children[0].children[3].style;
-            x1.color = 'white';
-            x1.backgroundColor = 'orange';
-            x2.color = 'orange';
-            x2.backgroundColor = 'white';
-            x3.color = 'orange';
-            x3.backgroundColor = 'white';
-            x4.color = 'orange';
-            x4.backgroundColor = 'white';
       		}
 
           var select_all = [];
@@ -291,7 +266,6 @@
               select_all.push(i);
             }
           }
-
           start(select_all, args);
         }
         else if(args == '0'){
@@ -305,101 +279,121 @@
               select_all.push(i);
             }
           }
-          var x4 = document.getElementById('dist-nav').children[0].children[0].style;
-          var x3 = document.getElementById('dist-nav').children[0].children[1].style;
-          var x2 = document.getElementById('dist-nav').children[0].children[2].style;
-          var x1 = document.getElementById('dist-nav').children[0].children[3].style;
-          x1.color = 'white';
-          x1.backgroundColor = 'orange';
-          x2.color = 'orange';
-          x2.backgroundColor = 'white';
-          x3.color = 'orange';
-          x3.backgroundColor = 'white';
-          x4.color = 'orange';
-          x4.backgroundColor = 'white';
           start(select_all, args);
         }
         else{
-          var store_name = <?=json_encode($store_name)?>;
-          var lat = <?=json_encode($lat)?>;
-          var lng = <?=json_encode($lng)?>;
-          var ppl_all = <?=json_encode($ppl)?>;
-          var select_all = [];
-          if(selected.length == 0){
-            alert("검색과 태그로 필터링된 가게가 없습니다!");
-            return;
+          if (navigator.geolocation) { // GPS를 지원하면
+            var store_name = <?=json_encode($store_name)?>;
+            var lat = <?=json_encode($lat)?>;
+            var lng = <?=json_encode($lng)?>;
+            var select_all = [];
+            if(selected.length == 0){
+              alert("검색과 태그로 필터링된 가게가 없습니다!");
+              return;
+            }
+            navigator.geolocation.getCurrentPosition(function(position) {
+              for(var i in selected){
+                var dis = getDistanceFromLatLonInKm(lat[i],lng[i],position.coords.latitude, position.coords.longitude)/1000;
+                console.log(dis+'m');
+                if(args == '-1' && dis < 100){
+                  select_all.push(i);
+                  var x4 = document.getElementById('dist-nav').children[0].children[0].style;
+                  var x3 = document.getElementById('dist-nav').children[0].children[1].style;
+                  var x2 = document.getElementById('dist-nav').children[0].children[2].style;
+                  var x1 = document.getElementById('dist-nav').children[0].children[3].style;
+                  x1.color = 'white';
+                  x1.backgroundColor = 'orange';
+                  x2.color = 'orange';
+                  x2.backgroundColor = 'white';
+                  x3.color = 'orange';
+                  x3.backgroundColor = 'white';
+                  x4.color = 'orange';
+                  x4.backgroundColor = 'white';
+                }
+                else if(args == '-2' && dis < 300){
+                  select_all.push(i);
+                  var x4 = document.getElementById('dist-nav').children[0].children[0].style;
+                  var x3 = document.getElementById('dist-nav').children[0].children[1].style;
+                  var x2 = document.getElementById('dist-nav').children[0].children[2].style;
+                  var x1 = document.getElementById('dist-nav').children[0].children[3].style;
+                  x1.color = 'orange';
+                  x1.backgroundColor = 'white';
+                  x2.color = 'white';
+                  x2.backgroundColor = 'orange';
+                  x3.color = 'orange';
+                  x3.backgroundColor = 'white';
+                  x4.color = 'orange';
+                  x4.backgroundColor = 'white';
+                }
+                else if(args == '-3' && dis < 500){
+                  select_all.push(i);
+                  var x4 = document.getElementById('dist-nav').children[0].children[0].style;
+                  var x3 = document.getElementById('dist-nav').children[0].children[1].style;
+                  var x2 = document.getElementById('dist-nav').children[0].children[2].style;
+                  var x1 = document.getElementById('dist-nav').children[0].children[3].style;
+                  x1.color = 'orange';
+                  x1.backgroundColor = 'white';
+                  x2.color = 'orange';
+                  x2.backgroundColor = 'white';
+                  x3.color = 'white';
+                  x3.backgroundColor = 'orange';
+                  x4.color = 'orange';
+                  x4.backgroundColor = 'white';
+                }
+                else if(args == '-4' && dis < 1000){
+                  select_all.push(i);
+                  var x4 = document.getElementById('dist-nav').children[0].children[0].style;
+                  var x3 = document.getElementById('dist-nav').children[0].children[1].style;
+                  var x2 = document.getElementById('dist-nav').children[0].children[2].style;
+                  var x1 = document.getElementById('dist-nav').children[0].children[3].style;
+                  x1.color = 'orange';
+                  x1.backgroundColor = 'white';
+                  x2.color = 'orange';
+                  x2.backgroundColor = 'white';
+                  x3.color = 'orange';
+                  x3.backgroundColor = 'white';
+                  x4.color = 'white';
+                  x4.backgroundColor = 'orange';
+                }
+              }
+              start(select_all, args);
+            }, function(error) {
+
+            }, {
+              enableHighAccuracy: false,
+              maximumAge: 0,
+              timeout: Infinity
+            });
+          } else {
+            alert('GPS를 지원하지 않습니다');
           }
-          for(var i in selected){
-            var index = selected[i];
-            var ppl = parseInt(ppl_all[index]);
-            if(args == '-1'){
-              select_all.push(index);
-              var x4 = document.getElementById('dist-nav').children[0].children[0].style;
-              var x3 = document.getElementById('dist-nav').children[0].children[1].style;
-              var x2 = document.getElementById('dist-nav').children[0].children[2].style;
-              var x1 = document.getElementById('dist-nav').children[0].children[3].style;
-              x1.color = 'white';
-              x1.backgroundColor = 'orange';
-              x2.color = 'orange';
-              x2.backgroundColor = 'white';
-              x3.color = 'orange';
-              x3.backgroundColor = 'white';
-              x4.color = 'orange';
-              x4.backgroundColor = 'white';
-            }
-            else if(args == '-2'){
-              if(30 < ppl && ppl <= 100)
-                select_all.push(index);
-              var x4 = document.getElementById('dist-nav').children[0].children[0].style;
-              var x3 = document.getElementById('dist-nav').children[0].children[1].style;
-              var x2 = document.getElementById('dist-nav').children[0].children[2].style;
-              var x1 = document.getElementById('dist-nav').children[0].children[3].style;
-              x1.color = 'orange';
-              x1.backgroundColor = 'white';
-              x2.color = 'white';
-              x2.backgroundColor = 'orange';
-              x3.color = 'orange';
-              x3.backgroundColor = 'white';
-              x4.color = 'orange';
-              x4.backgroundColor = 'white';
-            }
-            else if(args == '-3'){
-              if(100 < ppl && ppl <= 200)
-                select_all.push(index);
-              var x4 = document.getElementById('dist-nav').children[0].children[0].style;
-              var x3 = document.getElementById('dist-nav').children[0].children[1].style;
-              var x2 = document.getElementById('dist-nav').children[0].children[2].style;
-              var x1 = document.getElementById('dist-nav').children[0].children[3].style;
-              x1.color = 'orange';
-              x1.backgroundColor = 'white';
-              x2.color = 'orange';
-              x2.backgroundColor = 'white';
-              x3.color = 'white';
-              x3.backgroundColor = 'orange';
-              x4.color = 'orange';
-              x4.backgroundColor = 'white';
-            }
-            else if(args == '-4'){
-              if(200 < ppl)
-                select_all.push(index);
-              var x4 = document.getElementById('dist-nav').children[0].children[0].style;
-              var x3 = document.getElementById('dist-nav').children[0].children[1].style;
-              var x2 = document.getElementById('dist-nav').children[0].children[2].style;
-              var x1 = document.getElementById('dist-nav').children[0].children[3].style;
-              x1.color = 'orange';
-              x1.backgroundColor = 'white';
-              x2.color = 'orange';
-              x2.backgroundColor = 'white';
-              x3.color = 'orange';
-              x3.backgroundColor = 'white';
-              x4.color = 'white';
-              x4.backgroundColor = 'orange';
-            }
-          }
-          console.log(select_all);
-          start(select_all, args);
+
+
         }
+
     	}
+    function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
+      console.log("lat1: "+lat1+"");
+      console.log("lng1: "+lon1+"");
+      console.log("lat2: "+lat2+"");
+      console.log("lng2: "+lon2+"");
+      var theta = lon1 - lon2;
+      var dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) * Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+      dist = Math.acos(dist);
+      dist = rad2deg(dist);
+      dist = dist * 60 * 1.1515;
+      dist = dist * 1.609344;
+      console.log(dist);
+      return Number(dist).toFixed(3);
+    }
+
+    function deg2rad(deg) {
+      return deg * (Math.PI/180);
+    }
+    function rad2deg(rad) {
+      return (rad * 180 / Math.PI);
+    }
+
       function start(args1, args2)
       {
         init(args1, args2);
@@ -416,11 +410,11 @@
       {
         var map = new naver.maps.Map('map', {
           center: new naver.maps.LatLng(37.5575031, 126.9368837),
-          zoom: 11,
+          zoom: 12,
           zoomControl: true,
           minZoom:11
         });
-        if(args2 != '0' && args2!= '-1' && args2!= '-2' && args2!= '-3' && args2!= '-4'){//ifstart~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~``
+        if(args2 != '0' && args2!= '-1' && args2!= '-2' && args2!= '-3' && args2!= '-4'){
           if(args1 == undefined) return;
           //marker -------------------------------------------------------------------------------------------------------------
           var marker = [];
@@ -482,13 +476,13 @@
               setName(explain[i], marker[i]);
             }
           }
-        }//ifend~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        }
         else{
           if(args1 == undefined) return;
           //marker -------------------------------------------------------------------------------------------------------------
           var marker = [];
           for(var i = 0; i < lat.length; i++){
-            if(args1.indexOf(i) != -1){
+            if(args1.indexOf(i+"") != -1){
               marker[i] = new naver.maps.Marker({
                 position: new naver.maps.LatLng(lat[i], lng[i]),
                 map: map
@@ -497,12 +491,12 @@
           }
           //Explain-----------------------------------------------------------------------------------------------------------------
           var expl = [];
-          if(args2 == '0') selected = [];
+          selected = [];
           for(var i = 0; i < lat.length; i++){
             var x;
             if('<?=$isuser?>'=='t')  x = i;
             else x = "x";
-            if(args1.indexOf(i) != -1){
+            if(args1.indexOf(i+"") != -1){
               expl[i] = [
                     '<div class="expl-each">',
                     ' <h1>'+s_name[i]+'</h1>',
@@ -511,7 +505,7 @@
                     ' <div class="button"><ul><li><a href = "resv.php?i='+x+'">바로예약</a></li><li><a href = "storemore.php?i='+i+'" style "color: orange;">상세보기</a></li></ul></div>',
                     '</div>'
               ].join('');
-              if(args2 == '0') selected.push(i);
+              selected.push(i);
             }
             else{
               expl[i] = '0';
@@ -532,7 +526,7 @@
 
           var explain = [];
           for(var i = 0; i < lat.length; i++){
-            if(args1.indexOf(i) != -1){
+            if(args1.indexOf(i+"") != -1){
               explain[i] = [
                     '<div class="iw_inner">',
                     ' <h3>'+s_name[i]+'</h3>',

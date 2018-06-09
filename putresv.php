@@ -11,8 +11,12 @@
     print "Error - Could not connect to MySQL: ".mysqli_error();
     exit;
   }
+  $sql2 = "SELECT * FROM stores where user_N = '".$_SESSION['user_N']."'";
+  $result2 = mysqli_query($conn, $sql2);
+  $res2 = mysqli_fetch_assoc($result2);
+  $storeN = $res2['store_N'];
 
-  $sql = "INSERT INTO resvs VALUES ('0','".$y."', '".$m."', '".$d."', '".$expl."', '".$_SESSION['user_N']."', true, '".(int)$ppl."')";
+  $sql = "INSERT INTO resvs VALUES ('0','".$y."', '".$m."', '".$d."', '".$expl."', '".$_SESSION['user_N']."', true, '".(int)$ppl."', '".$storeN."')";
   $result = mysqli_query($conn, $sql);
   if($result){
     mysqli_close($conn);

@@ -1,5 +1,11 @@
 <!DOCTYPE HTML>
 <?php session_start();
+if(!isset($_SESSION['user_N'])){
+  $userN = '-1';
+}
+else{
+  $userN = $_SESSION['user_N'];
+}
 $id = $_GET['i'];
 $conn = mysqli_connect("localhost", "root", "kwondong704","users");
 if(!$conn){
@@ -19,7 +25,6 @@ if($result){
     $lng[] = $row['lng'];
     $review_num[] = $row['reviews'];
     $store_N[] = $row['store_N'];
-    $love[] = $row['love'];
   }
   $select_name = $store_name[$id];
   $select_ppl = $ppl[$id];
@@ -28,7 +33,6 @@ if($result){
   $select_lng = $lng[$id];
   $select_num = $review_num[$id];
   $select_N = $store_N[$id];
-  $select_love = $love[$id];
 
   if($tag[$id] == '1')
     $select_tag = '고기구이';
@@ -65,6 +69,7 @@ else{
 <?php
   $reviewer = [];
   $reviewtxt = [];
+  $reviewer_in_int = [];
   $conn = mysqli_connect("localhost", "root", "kwondong704","users");
   if(!$conn){
     print "Error - Could not connect to MySQL: ".mysqli_error();
@@ -312,19 +317,19 @@ else{
           <div id ="map" style = "width:100%;height:300px;"></div>
           <br>
           <div class = 'more' style = 'background-color: orange; color: white; margin-bottom: 0; border-bottom: none;'>리뷰</div>
-          <div class = 'more' style = 'background-color: orange; color: white; margin-bottom: 0; margin-top: 0; border-bottom: none;'>( 점주님 리뷰는 분홍색입니다 )</div>
+          <div class = 'more' style = 'background-color: orange; color: white; margin-bottom: 0; margin-top: 0; border-bottom: none;'>점주님 리뷰는 분홍색, 일반 리뷰는 연두색</div>
           <?php
-            echo "<div class = 'more' style = 'margin-top: 0; border-top: none;'>리뷰수: ".sizeof($review_num)."</div>";
+            echo "<div class = 'more' style = 'margin-top: 0; border-top: none;'>리뷰수: ".$select_num."</div>";
            ?>
           <?php
-          if($review_num == 0){
+          if($select_num == 0){
             echo "<div id = 'review' style = 'width: 100%; border: 1px solid orange'><h1 style = 'color: orange;'>아직 등록된 리뷰가 없습니다!</h1><h1 style = 'color: orange;'>리뷰를 등록해주세요!</h1></div>";
           }
           else{
             for($i = 0; $i < sizeof($reviewtxt); $i++){
-              if($reviewtype == '0'){
+              if($reviewtype[$i] == '0'){
                 $str = "";
-                $str = $str."<div id = 'review' style = 'width: 100%; border: 1px solid orange; color: orange;'><span style = 'background-color: orange; color: white;'>";
+                $str = $str."<div id = 'review' style = 'width: 100%; border: 1px solid orange; color: orange;'><span style = 'background-color: #00ff00; color: white;'>";
                 $str = $str."작성자: ".$reviewer[$i]."&nbsp;</span><span>리뷰:  ".$reviewtxt[$i]."</span>";
                 $str = $str."</div>";
                 echo $str;
@@ -360,22 +365,29 @@ else{
     </footer>
     <script>
       function review(){
-        var x = document.getElementById('reviewin').value;
-        var form = document.createElement("form");
-    		form.setAttribute("method", "POST");
-    		form.setAttribute("action", "review.php?i=<?=$id?>");
-    		var hiddenField = document.createElement("input");
-    		hiddenField.setAttribute("type", "hidden");
-    		hiddenField.setAttribute("name", "reviewer");
-    		hiddenField.setAttribute("value", <?=$_SESSION['user_N']?>);
-    		form.appendChild(hiddenField);
-    		var hiddenField1 = document.createElement("input");
-    		hiddenField1.setAttribute("type", "hidden");
-    		hiddenField1.setAttribute("name", "review");
-    		hiddenField1.setAttribute("value", x);
-    		form.appendChild(hiddenField1);
-    		document.body.appendChild(form);
-    		form.submit();
+        if(<?=$userN?>==-1){
+          alert("로그인 먼저 해주세요!");
+          window.location = "login.html";
+          return;
+        }
+        else{
+          var x = document.getElementById('reviewin').value;
+          var form = document.createElement("form");
+      		form.setAttribute("method", "POST");
+      		form.setAttribute("action", "review.php?i=<?=$id?>");
+      		var hiddenField = document.createElement("input");
+      		hiddenField.setAttribute("type", "hidden");
+      		hiddenField.setAttribute("name", "reviewer");
+      		hiddenField.setAttribute("value", <?=$userN?>);
+      		form.appendChild(hiddenField);
+      		var hiddenField1 = document.createElement("input");
+      		hiddenField1.setAttribute("type", "hidden");
+      		hiddenField1.setAttribute("name", "review");
+      		hiddenField1.setAttribute("value", x);
+      		form.appendChild(hiddenField1);
+      		document.body.appendChild(form);
+      		form.submit();
+        }
       }
     </script>
   </body>

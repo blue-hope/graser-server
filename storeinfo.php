@@ -18,7 +18,6 @@
     $store_tag = $res['tag'];
   }
   else{
-    echo "<script>alert('지점 등록에 실패하였습니다!');</script>";
     echo "<script>window.location.replace('mypage.php');</script>";
     mysqli_close($conn);
   }

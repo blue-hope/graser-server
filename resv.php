@@ -2,46 +2,50 @@
  <?php session_start();
  $id = $_GET['i'];
  if($id == 'x'){
-   echo "<script>window.location = 'login.html'";
- }
- $conn = mysqli_connect("localhost", "root", "kwondong704","users");
- if(!$conn){
-   print "Error - Could not connect to MySQL: ".mysqli_error();
-   exit;
- }
- if(!isset($_SESSION['user_N'])){
-   mysqli_close($conn);
    echo "<script>alert('로그인 먼저 해주세요'); window.location = 'login.html';</script>";
  }
-
- $isdate = 't';
- $sql = "SELECT * FROM stores";
- $result = mysqli_query($conn, $sql);
- $sql2 = "SELECT * FROM resvs WHERE user_N = '".$_SESSION['user_N']."' and checked = 1";
- $result2 = mysqli_query($conn, $sql2);
- if($result && $result2){
-   while($row = mysqli_fetch_assoc($result)){
-     $store_name[] = $row['store'];
-   }
-   $select_name = $store_name[$id];
-
-   while($row = mysqli_fetch_assoc($result2)){
-     $resv_m[] = $row['month'];
-     $resv_d[] = $row['day'];
-     $resv_y[] = $row['year'];
-     $resv_expl[] = $row['expl'];
-   }
-
- }
  else{
-   mysqli_close($conn);
- }
- if(!isset($resv_m)){
-   $isdate = 'f';
-   $resv_m = [];
-   $resv_d = [];
-   $resv_y = [];
-   $resv_expl = [];
+   $conn = mysqli_connect("localhost", "root", "kwondong704","users");
+   if(!$conn){
+     print "Error - Could not connect to MySQL: ".mysqli_error();
+     exit;
+   }
+   if(!isset($_SESSION['user_N'])){
+     mysqli_close($conn);
+     echo "<script>alert('로그인 먼저 해주세요!'); window.location = 'login.html';</script>";
+   }
+
+   $isdate = 't';
+   $sql = "SELECT * FROM stores";
+   $result = mysqli_query($conn, $sql);
+   $sql2 = "SELECT * FROM resvs WHERE user_N = '".$_SESSION['user_N']."' and checked = 1";
+   $result2 = mysqli_query($conn, $sql2);
+   if($result && $result2){
+     while($row = mysqli_fetch_assoc($result)){
+       $store_name[] = $row['store'];
+       $store_N[] = $row['store_N'];
+     }
+     $select_name = $store_name[$id];
+     $select_storeN = $store_N[$id];
+
+     while($row = mysqli_fetch_assoc($result2)){
+       $resv_m[] = $row['month'];
+       $resv_d[] = $row['day'];
+       $resv_y[] = $row['year'];
+       $resv_expl[] = $row['expl'];
+     }
+
+   }
+   else{
+     mysqli_close($conn);
+   }
+   if(!isset($resv_m)){
+     $isdate = 'f';
+     $resv_m = [];
+     $resv_d = [];
+     $resv_y = [];
+     $resv_expl = [];
+   }
  }
 
  ?>
@@ -213,7 +217,7 @@
            <br>
            <h1 style = 'color: orange;'>손쉬운 예약</h1>
            <br>
-          <form action="resvOK.php" id = 'resvOKform' method="post">
+          <form action="resvOK.php?i=<?=$select_storeN?>" id = 'resvOKform' method="post">
            <h2>상호명</h2>
            <h2 style = 'color: blue;'><?=$select_name?></h2>
            <br>
