@@ -157,6 +157,7 @@
           tmpDay += "-";
           tmpDay += resv_y[i];
           disabledDays.push(tmpDay);
+          console.log(resv_expl[i]);
         }
       }
 
@@ -181,8 +182,8 @@
       /* create datepicker */
       jQuery(document).ready(function() {
         jQuery('#datepicker').datepicker({
-          minDate: new Date(t_y, t_d, t_m),
-          maxDate: new Date(parseInt(t_y)+1, t_d, t_m),
+          minDate: new Date(t_y, t_m, t_d),
+          maxDate: new Date(parseInt(t_y)+1, t_m, t_d),
           dateFormat: 'DD, MM, d, yy',
           constrainInput: true,
           beforeShowDay: noWeekendsOrHolidays

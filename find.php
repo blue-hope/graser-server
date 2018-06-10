@@ -302,7 +302,7 @@
 
           for(var i in store_name){
             if(store_name[i].indexOf(search) != -1){
-              select_all.push(i);
+              select_all.push(parseInt(i));
             }
           }
           var x4 = document.getElementById('dist-nav').children[0].children[0].style;
@@ -396,7 +396,6 @@
               x4.backgroundColor = 'orange';
             }
           }
-          console.log(select_all);
           start(select_all, args);
         }
     	}
