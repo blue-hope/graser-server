@@ -134,7 +134,7 @@
     <header>
       <nav>
         <ul style = 'height: 48px;'>
-          <li id = 'logo'><a href = 'index.php'>logo</a></li>
+          <li id = 'logo'><a href = 'index.php'><img src = "img/mainicon.png" alt = "logo" style= "height: 35px;"></a></li>
           <?php
           if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
             echo "<li style='float: right' id = 'login'><a href = 'login.html'><i class = 'material-icons'>person</i></a></li>";
@@ -167,7 +167,7 @@
     </article>
     <footer>
       <nav>
-        <ul style = 'height: 56px;'>
+        <ul style = 'margin-bottom: 0;'>
           <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
           <li id = 'mypage' style = 'background-color: orange;'><a href = 'mypage.php'><i class='material-icons' style = 'color: white;'>info</i></a></li>

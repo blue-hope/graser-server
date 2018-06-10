@@ -1,20 +1,6 @@
 <!DOCTYPE HTML>
 <?php session_start();?>
 <?php
-  if(isset($_GET['expl'])){
-    $permission = $_GET['expl'];
-    $conn = mysqli_connect("localhost", "root", "kwondong704","users");
-    if(!$conn){
-      print "Error - Could not connect to MySQL: ".mysqli_error();
-      exit;
-    }
-    $sql = "UPDATE resvs SET checked = 1 WHERE expl = '".$permission."'";
-    $result = mysqli_query($conn, $sql);
-    mysqli_close($conn);
-    echo "<script>window.location = 'mypage.php';</script>";
-  }
-?>
-<?php
   $conn = mysqli_connect("localhost", "root", "kwondong704","users");
   $store_name = "";
   if(!$conn){
@@ -27,6 +13,7 @@
     echo "<script>window.location.replace('login.html');</script>";
   }
 
+
   $sql = "SELECT * FROM stores WHERE user_N = '".$_SESSION['user_N']."'";
   $result = mysqli_query($conn, $sql);
   $res = mysqli_fetch_assoc($result);
@@ -34,7 +21,6 @@
     $store_name = $res['store'];
     $store_lat = $res['lat'];
     $store_lng = $res['lng'];
-    $store_N = $res['store_N'];
   }
   else{
     echo "<script>alert('데이터 베이스를 읽는데 실패했습니다!');</script>";
@@ -42,34 +28,11 @@
     mysqli_close($conn);
   }
 
-  $sql2 = "SELECT * FROM resvs WHERE resvto = '".$store_N."' and checked = false";//점주
+  $sql2 = "SELECT * FROM resvs WHERE resvto = '".$_SESSION['user_N']."' and checked = false";//점주
   $sql3 = "SELECT * FROM resvs WHERE user_N = '".$_SESSION['user_N']."'";//손님
   if($_SESSION['resv'] != '0'){
     $result2 = mysqli_query($conn, $sql2);
     $result3 = mysqli_query($conn, $sql3);
-    if($result2){
-      while($row = mysqli_fetch_assoc($result2)){
-        $resv_m[] = $row['month'];
-        $resv_d[] = $row['day'];
-        $resv_y[] = $row['year'];
-        $resv_expl[] = $row['expl'];
-      }
-      if(!isset($resv_m)){
-        $resv_num = 0;
-        $resv_m = [];
-        $resv_d = [];
-        $resv_y = [];
-        $resv_expl = [];
-      }
-      else
-        $resv_num = sizeof($resv_m);
-
-    }
-  }
-
-  $sql2 = "SELECT * FROM resvs WHERE user_N = '".$_SESSION['user_N']."' and checked = false";
-  if($_SESSION['resv'] != '0'){
-    $result2 = mysqli_query($conn, $sql2);
     if($result2){
       while($row = mysqli_fetch_assoc($result2)){
         $resv_m[] = $row['month'];
@@ -99,13 +62,6 @@
         $uresv_y[] = $row['year'];
         $uresv_expl[] = $row['expl'];
         $uresv_check[] = $row['checked'];
-        $sql4 = "SELECT * FROM stores where store_N = '".$row['resvto']."'";
-        $result4 = mysqli_query($conn, $sql4);
-        if($result4){
-          $res4 = mysqli_fetch_assoc($result4);
-          $uresv_store[] = $res4['store'];
-        }
-
       }
       if(!isset($uresv_m)){
         $uresv_num = 0;
@@ -114,7 +70,6 @@
         $uresv_y = [];
         $uresv_expl = [];
         $uresv_check = [];
-        $uresv_store = [];
       }
       else
         $uresv_num = sizeof($uresv_m);
@@ -132,44 +87,8 @@
     $uresv_y = [];
     $uresv_expl = [];
     $uresv_check = [];
-    $uresv_store = [];
-  }
-
-  $review_store_name = [];
-  $review_user = [];
-  $review_store_name_s = [];
-  $review_user_s = [];
-  $sql_rev = "SELECT * FROM reviews where user_N = '".$_SESSION['user_N']."'";
-  $result_rev = mysqli_query($conn, $sql_rev);
-  if($result_rev){
-    while($row_rev = mysqli_fetch_assoc($result_rev)){
-      $sql_store = "SELECT * FROM stores where store_N = '".$row_rev['store_N']."'";
-      $result_store = mysqli_query($conn, $sql_store);
-      $row_store = mysqli_fetch_assoc($result_store);
-      $review_store_name[] = $row_store['store'];
-      $review_user[] = $row_rev['txt'];
-    }
-  }
-  else{
-    echo "<script>console.log('리뷰불러오기실패');</script>";
-  }
-
-  $sql_rev_s = "SELECT * FROM reviews where store_N = '".$store_N."'";
-  $result_rev_s = mysqli_query($conn, $sql_rev_s);
-  if($result_rev_s){
-    while($row_rev_s = mysqli_fetch_assoc($result_rev_s)){
-      $sql_store_s = "SELECT * FROM users where user_N = '".$row_rev_s['user_N']."'";
-      $result_store_s = mysqli_query($conn, $sql_store_s);
-      $row_store_s = mysqli_fetch_assoc($result_store_s);
-      $review_store_name_s[] = $row_store_s['user_Name'];
-      $review_user_s[] = $row_rev_s['txt'];
-    }
-  }
-  else{
-    echo "<script>console.log('리뷰불러오기실패');</script>";
   }
   mysqli_close($conn);
-
  ?>
 <html>
   <head>
@@ -186,8 +105,8 @@
 
     <!--bootstrap-->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
     <!--font-->
     <link href="https://fonts.googleapis.com/css?family=Nanum+Gothic:700" rel="stylesheet">
@@ -210,14 +129,14 @@
         margin: 3px;
       }
       div.more
-       {
-         width: 70%;
-         margin-left: 15%;
-         margin-top: 10px;
-         border: 1px solid orange;
-         text-align: center;
-         color: orange;
-       }
+  	  {
+    	  width: 70%;
+    	  margin-left: 15%;
+    	  margin-top: 10px;
+    	  border: 1px solid orange;
+    	  text-align: center;
+    	  color: orange;
+  	  }
       div.open
       {
         width: 70%;
@@ -225,23 +144,23 @@
       }
 
       .k
-       {
-          background-color: orange;
-          color: white;
-          border: 1px solid white;
-          text-align: center;
-          width: 40px;
-          margin-left: 80%;
-       }
+    	{
+    		background-color: orange;
+    		color: white;
+    		border: 1px solid white;
+    		text-align: center;
+    		width: 40px;
+    		margin-left: 80%;
+    	}
       .k:hover
-       {
-          background-color: white;
-          color: orange;
-          border: 1px solid orange;
-          text-align: center;
-          width: 40px;
-          margin-left: 80%;
-       }
+  	  {
+    		background-color: white;
+    		color: orange;
+    		border: 1px solid orange;
+    		text-align: center;
+    		width: 40px;
+    		margin-left: 80%;
+  	  }
       h2#title{
         font-size: 13px;
         border: none;
@@ -262,7 +181,7 @@
     <header>
       <nav>
         <ul style = 'height: 48px;'>
-          <li id = 'logo'><a href = 'index.php'><img src = "img/mainicon.png" alt = "logo" style= "height: 35px;"></a></li>
+          <li id = 'logo'><a href = 'index.php'>logo</a></li>
           <?php
           if(!isset($_SESSION['user_id']) || !isset($_SESSION['user_name'])) {
             echo "<li style='float: right' id = 'login'><a href = 'login.html'><i class = 'material-icons'>person</i></a></li>";
@@ -285,8 +204,10 @@
                 echo "<h1>손님계정 접속중</h1>";
                 echo "<div class = 'more' onclick = 'res_info()'>현재 예약</div>";
                 echo "<div class = 'open' id = 'res_info'></div>";
-                echo "<div class = 'more' onclick = 'review_before()'>리뷰 관리</div>";
-                echo "<div cl)ass = 'open' id = 'review_manage'></div>";
+                echo "<div class = 'more'>리뷰 관리</div>";
+                echo "<div class = 'open' id = 'review_manage'></div>";
+                echo "<div class = 'more'>계정 관리</div>";
+                echo "<div class = 'open' id = 'id_manage'></div>";
               }
               elseif($_SESSION['user_type'] == '1'){
                 echo "<h1>점주님계정 접속중</h1>";
@@ -303,8 +224,10 @@
                 echo "<div class = 'open' id = 'res_upload'></div>";
                 echo "<div class = 'more' onclick = 'res_info()'>지점관리</div>";
                 echo "<div class = 'open' id = 'res_info'></div>";
-                echo "<div class = 'more' onclick = 'review_before()'>리뷰보기</div>";
-                echo "<div class = 'open' id = 'review_view'></div>";
+                echo "<div class = 'more'>리뷰 관리</div>";
+                echo "<div class = 'open' id = 'review_manage'></div>";
+                echo "<div class = 'more'>계정관리</div>";
+                echo "<div class = 'open' id = 'id_manage2'></div>";
               }
               elseif($_SESSION['user_type'] == '2'){
                 echo "<h1>관리자계정 접속중</h1>";
@@ -320,7 +243,7 @@
     </article>
     <footer>
       <nav>
-        <ul style = 'margin-bottom: 0;'>
+        <ul style = 'height: 56px;'>
           <li id = 'index'><a href = 'index.php'><i class='material-icons'>assignment</i></a></li>
           <li id = 'find'><a href = 'find.php'><i class='material-icons'>pageview</i></a></li>
           <li id = 'mypage' style = 'background-color: orange;'><a href = 'mypage.php'><i class='material-icons' style = 'color: white;'>info</i></a></li>
@@ -385,8 +308,6 @@
          });
        });
       }
-    </script>
-    <script>
       function regs_date(){
         var ele = document.getElementById('datepicker').value;
         var ele2 = document.getElementById('dateexpl').value;
@@ -405,7 +326,6 @@
         if(y == '0'){
           var ele = document.getElementById('res_info');
           var ele2 = document.getElementsByClassName('more');
-
           if(x == 0){
             ele.innerHTML = "<h1>현재 예약 정보가 없습니다</h1> \r\n <div class = \"k\" onclick = \"res_info()\">닫기</div>";
             if(ele2[0].style.backgroundColor == "white"){
@@ -460,7 +380,6 @@
               }
               var uresv_expl = <?=json_encode($uresv_expl)?>;
               var uresv_check = <?=json_encode($uresv_check)?>;
-              var uresv_store = <?=json_encode($uresv_store)?>;
               var falseN = 0;
               for(var i in uresv_check){
                 if(uresv_check[i] == false){
@@ -469,20 +388,18 @@
               }
               var trueN = parseInt(<?=$uresv_num?>) - falseN;
               var inner = "<h1>현재 예약 대기수는 "+falseN+"개입니다.</h1> <br><h1>목록</h1><br>";
-              var num = 1;
               for(var i = 0; i < <?=$uresv_num?>; i++){
                 if(uresv_check[i] == false){
-                  inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + uresv_expl[i] + "</h2><h2>예약지점: " + uresv_store[i] + "</h2><h2 style = 'margin: 0;'>" + uresv_y[i] + "년 " + uresv_m[i] + "월 " + uresv_d[i] + "일 </h2><br>";
-                  num = num + 1;
+                  var num = parseInt(i)+1;
+                  inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + uresv_expl[i] + "</h2><h2 style = 'margin: 0;'>" + uresv_y[i] + "년 " + uresv_m[i] + "월 " + uresv_d[i] + "일 </h2>";
                 }
               }
               inner += "<br><hr><br>";
               inner += "<h1>지금까지 승인된 예약은 모두 "+trueN+"개입니다.</h1> <br><h1>목록</h1><br>";
-              num = 1;
               for(var i = 0; i < <?=$uresv_num?>; i++){
                 if(uresv_check[i] == true){
-                  inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + uresv_expl[i] + "</h2><h2 style = 'margin: 0;'>" + uresv_y[i] + "년 " + uresv_m[i] + "월 " + uresv_d[i] + "일 </h2><br>";
-                  num = num + 1;
+                  var num = parseInt(i)+1;
+                  inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + uresv_expl[i] + "</h2><h2 style = 'margin: 0;'>" + uresv_y[i] + "년 " + uresv_m[i] + "월 " + uresv_d[i] + "일 </h2>";
                 }
               }
               ele.innerHTML = inner;
@@ -500,7 +417,7 @@
             ele.style.border = "";
           }
         }
-        }else if(y == '1'){
+      }else if(y == '1'){
           var ele = document.getElementById('res_info');
           var ele2 = document.getElementsByClassName('more');
 
@@ -523,81 +440,6 @@
           }
         }
       }
-
-      function review_before()
-      {
-        var y = <?=$_SESSION['user_type']?>;
-        if(y==0)
-        {
-            var ele = document.getElementById('review_manage');
-            var ele2 = document.getElementsByClassName('more');
-
-            if(ele2[1].style.backgroundColor == "white"){
-              ele2[1].style.backgroundColor = "orange";
-              ele2[1].style.color = "white";
-              ele.style.border = "1px solid orange";
-              <?php
-                if(sizeof($review_user) == 0){$str = "<div id = 'review' style = 'width: 100%; border: 1px solid orange'><h1 style = 'color: orange;'>아직 등록된 리뷰가 없습니다!</h1><h1 style = 'color: orange;'>리뷰를 등록해주세요!</h1></div>";
-                }
-                else{
-                  for($i = 0; $i < sizeof($review_user); $i++){
-                    $str = "";
-                    $str = $str."<div id = 'review' style = 'width: 100%; border: 1px solid orange; color: orange;'><span style = 'background-color: #fa8072; color: white;'>";
-                    $str = $str."가게: ".$review_store_name[$i]."&nbsp;</span><span>리뷰:  ".$review_user[$i]."</span>";
-                    $str = $str."</div>";
-                  }
-
-                }
-              ?>
-
-              ele.innerHTML = "<?=$str?>";
-            }
-            else{
-              ele2[1].style.backgroundColor = "white";
-              ele2[1].style.color = "orange";
-              ele.innerHTML = "";
-              ele.style.border = "";
-            }
-
-
-        }
-        else
-        {
-          var ele = document.getElementById('review_view');
-          var ele2 = document.getElementsByClassName('more');
-
-          if(ele2[3].style.backgroundColor == "white"){
-            ele2[3].style.backgroundColor = "orange";
-            ele2[3].style.color = "white";
-            ele.style.border = "1px solid orange";
-            <?php
-              if(sizeof($review_user_s) == 0){$str = "<div id = 'review' style = 'width: 100%; border: 1px solid orange'><h1 style = 'color: orange;'>아직 등록된 리뷰가 없습니다!</h1><h1 style = 'color: orange;'>리뷰를 등록해주세요!</h1></div>";
-              }
-              else{
-                for($i = 0; $i < sizeof($review_user_s); $i++){
-                  $str = "";
-                  $str = $str."<div id = 'review' style = 'width: 100%; border: 1px solid orange; color: orange;'><span style = 'background-color: #fa8072; color: white;'>";
-                  $str = $str."유저: ".$review_store_name_s[$i]."&nbsp;</span><span>리뷰:  ".$review_user_s[$i]."</span>";
-                  $str = $str."</div>";
-                }
-
-              }
-            ?>
-
-            ele.innerHTML = "<?=$str?>";
-          }
-          else{
-            ele2[3].style.backgroundColor = "white";
-            ele2[3].style.color = "orange";
-            ele.innerHTML = "";
-            ele.style.border = "";
-          }
-
-
-
-        }
-      }
-
     </script>
     <script>
       function res_in_info(){
@@ -661,7 +503,7 @@
             for(var i = 0; i < <?=$resv_num?>; i++){
               var num = parseInt(i)+1;
               inner += "<div><h2 id = 'title' style = 'margin: 0;'>" + num + "번째 예약: " + resv_expl[i] + "</h2><h2 style = 'margin: 0;'>" + resv_y[i] + "년 " + resv_m[i] + "월 " + resv_d[i] + "일 </h2>";
-              inner += "<a style = 'font-size: 13px; margin: 0; padding-left: 10%; padding-bottom: 3px;' href = 'mypage.php?expl="+ resv_expl[i] +"'" + resv_expl[i] + ">예약승인</a></div><hr>";
+              inner += "<a style = 'font-size: 13px; margin: 0; padding-left: 10%; padding-bottom: 3px;' href = 'resv_permission.php?expl='" + resv_expl[i] + ">예약승인</a></div><hr>";
             }
             ele.innerHTML = inner;
           }
@@ -679,7 +521,6 @@
           }
         }
       }
-
     </script>
   </body>
 
