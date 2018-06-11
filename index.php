@@ -119,12 +119,11 @@
         </div>
         <div id = 'info_3' style = 'border-top: 1px solid white;'>
           <br>
-          <h2>그레서의 오늘의 추천</h2>
+          <h2>그레서 사용법</h2>
           <br>
-          <blockquote>
-            '그레서'를 통해 자신의 소중한 추억을 간직하세요 <br> 사용자가 방문한 음식점에 대한 후기를 <br> 그레서의 리뷰기능을 통해
-            <br>바로 남길 수 있습니다.
-          </blockquote>
+          <div width="100%">
+            <iframe width="100%" height="200" src="https://www.youtube.com/embed/CPquYG4g_gI" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+          <div>
           <br>
         </div>
         <div id = 'info_4'>
